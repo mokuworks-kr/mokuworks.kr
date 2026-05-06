@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const NAV_ITEMS = [
@@ -13,9 +14,17 @@ export function Header() {
       <div className="h-full flex items-center justify-between px-4 md:px-8">
         <Link
           href="/"
-          className="text-[18px] font-medium text-ink hover:opacity-60 transition-opacity duration-150"
+          aria-label="mokuworks 홈"
+          className="hover:opacity-60 transition-opacity duration-150"
         >
-          mokuworks
+          <Image
+            src="/logo.svg"
+            alt="mokuworks"
+            width={228}
+            height={32}
+            priority
+            className="h-7 md:h-8 w-auto"
+          />
         </Link>
         <nav>
           <ul className="flex items-center gap-4 md:gap-6 text-sm md:text-body text-ink">

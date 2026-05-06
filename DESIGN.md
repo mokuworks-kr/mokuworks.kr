@@ -275,7 +275,9 @@ border-radius: 9999px (완전 둥근)
 ```
 높이: 64px
 배경: --color-paper (스크롤 시에도 동일)
-좌측: mokuworks 로고/워드마크 (--color-ink, 16-18px, weight 500)
+좌측: mokuworks 로고 이미지 (`public/logo.svg`)
+  - 높이: 모바일 28px, 데스크톱 32px (width 비율 자동)
+  - 호버: opacity 0.6
 우측: Design / Products / About / Contact (16px, weight 400, --color-ink)
   - 호버: opacity 0.6
   - 현재 페이지: opacity 0.6 (활성 표시는 약하게)
@@ -386,7 +388,7 @@ border-radius: 9999px (완전 둥근)
 
 ### 로고/워드마크
 
-mokuworks 워드마크는 Asta Sans Medium(500) 또는 SemiBold(600)으로 텍스트 처리. 별도 로고 이미지 사용하지 않음 (시간이 지나도 안 늙는 텍스트 워드마크가 1인 메이커 사이트에 적합).
+mokuworks 로고는 `public/logo.svg` 단일 파일 사용. Header를 비롯해 사이트 어디든 로고가 필요한 자리에 동일 파일을 동일 색(검정) 그대로 배치. SVG 한 가지 색만 쓰므로 라이트/다크 변형은 v1에선 만들지 않음.
 
 ### Favicon / OG 이미지
 
