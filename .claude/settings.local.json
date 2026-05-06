@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh auth *)",
+      "Bash(pnpm -v)",
+      "Bash(vercel whoami *)",
+      "Bash(supabase --version)",
+      "Bash(supabase projects *)",
+      "Bash(npm install *)",
+      "Bash(pnpm create *)",
+      "Bash(mkdir -p /tmp/mokuworks-md-backup)",
+      "Bash(mv /Users/gwa.ji.oon/Desktop/mokuworks.kr/CLAUDE.md /Users/gwa.ji.oon/Desktop/mokuworks.kr/SPEC.md /Users/gwa.ji.oon/Desktop/mokuworks.kr/DESIGN.md /tmp/mokuworks-md-backup/)",
+      "Read(//tmp/**)"
+    ]
+  }
+}
