@@ -33,7 +33,8 @@
 ### 코드 작성 후
 - 변경 후 `pnpm typecheck`와 `pnpm lint` 통과 확인.
 - 빌드 에러 없는지 `pnpm build` 검증.
-- 한 작업 단위가 끝나면 git commit 제안 (사용자가 직접 커밋, AI는 commit 명령 실행하지 않음).
+- 한 작업 단위가 끝나면 AI가 커밋 메시지를 제안하고, 사용자 승인 후 AI가 git commit·push까지 실행. Vercel은 push에 자동 트리거되므로 별도 액션 불필요.
+- Supabase 마이그레이션도 같은 패턴: AI가 마이그레이션 파일 작성 → 사용자 승인 → AI가 `pnpm dlx supabase db push`로 적용.
 
 ## Hard Don'ts
 

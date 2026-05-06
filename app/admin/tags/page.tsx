@@ -14,7 +14,7 @@ export default async function AdminTagsPage() {
   const supabase = await createClient();
   const [{ data: tags }, { data: designs }] = await Promise.all([
     supabase.from("tags").select("*").order("category").order("name"),
-    supabase.from("designs").select("id, tags"),
+    supabase.from("design").select("id, tags"),
   ]);
 
   const usage: Record<string, number> = {};

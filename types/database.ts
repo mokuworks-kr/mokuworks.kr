@@ -39,7 +39,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      designs: {
+      design: {
         Row: {
           client: string
           created_at: string

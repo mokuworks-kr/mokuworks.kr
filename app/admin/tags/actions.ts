@@ -51,14 +51,14 @@ export async function deleteTag(id: string): Promise<Result> {
   const supabase = await createClient();
 
   const { data: usingDesigns } = await supabase
-    .from("designs")
+    .from("design")
     .select("id, tags")
     .contains("tags", [id]);
 
   if (usingDesigns && usingDesigns.length > 0) {
     for (const d of usingDesigns) {
       const next = (d.tags ?? []).filter((t) => t !== id);
-      await supabase.from("designs").update({ tags: next }).eq("id", d.id);
+      await supabase.from("design").update({ tags: next }).eq("id", d.id);
     }
   }
 
