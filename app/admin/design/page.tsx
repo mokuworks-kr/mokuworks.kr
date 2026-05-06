@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PageHeader } from "@/components/admin/PageHeader";
-import { TransitionLink } from "@/components/TransitionLink";
+import { FilterChips } from "@/components/FilterChips";
 import { createClient } from "@/lib/supabase/server";
 
 import { DesignRowActions } from "./DesignRowActions";
@@ -97,14 +97,16 @@ export default async function AdminDesignPage({
         paramName="industry"
         tags={industries}
         selected={industryFilters}
-        currentSP={sp}
+        baseHref="/admin/design"
+        searchParams={sp}
       />
       <FilterChips
         label="Work Type"
         paramName="type"
         tags={types}
         selected={typeFilters}
-        currentSP={sp}
+        baseHref="/admin/design"
+        searchParams={sp}
       />
 
       {designs.length === 0 ? (
@@ -148,67 +150,3 @@ export default async function AdminDesignPage({
   );
 }
 
-function FilterChips({
-  label,
-  paramName,
-  tags,
-  selected,
-  currentSP,
-}: {
-  label: string;
-  paramName: "type" | "industry";
-  tags: { id: string; name: string }[];
-  selected: Set<string>;
-  currentSP: SearchParams;
-}) {
-  if (tags.length === 0) return null;
-
-  function buildHref(nextSelected: Set<string>): string {
-    const params = new URLSearchParams();
-    if (currentSP.q) params.set("q", currentSP.q);
-    const otherKey = paramName === "type" ? "industry" : "type";
-    const otherVal = currentSP[otherKey];
-    if (otherVal) params.set(otherKey, otherVal);
-    const value = [...nextSelected].join(",");
-    if (value) params.set(paramName, value);
-    const qs = params.toString();
-    return qs ? `/admin/design?${qs}` : "/admin/design";
-  }
-
-  return (
-    <div className="mt-6 flex flex-col gap-2">
-      <p className="text-caption text-stone">{label}</p>
-      <div className="flex flex-wrap gap-2">
-        <TransitionLink
-          href={buildHref(new Set())}
-          className={chipCls(selected.size === 0)}
-        >
-          전체
-        </TransitionLink>
-        {tags.map((t) => {
-          const active = selected.has(t.id);
-          const next = new Set(selected);
-          if (active) next.delete(t.id);
-          else next.add(t.id);
-          return (
-            <TransitionLink
-              key={t.id}
-              href={buildHref(next)}
-              className={chipCls(active)}
-            >
-              {t.name}
-            </TransitionLink>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function chipCls(active: boolean): string {
-  return `px-4 py-1.5 rounded-full text-small border transition-colors duration-150 ${
-    active
-      ? "bg-ink text-paper border-ink"
-      : "bg-transparent text-stone border-mist hover:border-stone"
-  }`;
-}
