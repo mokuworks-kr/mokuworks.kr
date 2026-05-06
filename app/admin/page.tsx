@@ -15,14 +15,18 @@ export default async function AdminDashboardPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [{ count: newInquiriesCount }, { count: productsCount }] =
-    await Promise.all([
-      supabase
-        .from("inquiries")
-        .select("*", { count: "exact", head: true })
-        .eq("status", "new"),
-      supabase.from("products").select("*", { count: "exact", head: true }),
-    ]);
+  const [
+    { count: newInquiriesCount },
+    { count: productsCount },
+    { count: designCount },
+  ] = await Promise.all([
+    supabase
+      .from("inquiries")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "new"),
+    supabase.from("products").select("*", { count: "exact", head: true }),
+    supabase.from("design").select("*", { count: "exact", head: true }),
+  ]);
 
   return (
     <section className="px-4 md:px-8 py-16 max-w-3xl">
@@ -58,8 +62,8 @@ export default async function AdminDashboardPage() {
         />
         <DashboardCard
           label="디자인 작업"
-          value="준비 중"
-          disabled
+          value={`${designCount ?? 0}개`}
+          href="/admin/design"
         />
       </nav>
     </section>
