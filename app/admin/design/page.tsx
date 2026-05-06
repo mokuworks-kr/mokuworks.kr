@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PageHeader } from "@/components/admin/PageHeader";
+import { TransitionLink } from "@/components/TransitionLink";
 import { createClient } from "@/lib/supabase/server";
 
 import { DesignRowActions } from "./DesignRowActions";
@@ -178,21 +179,25 @@ function FilterChips({
     <div className="mt-6 flex flex-col gap-2">
       <p className="text-caption text-stone">{label}</p>
       <div className="flex flex-wrap gap-2">
-        <Link
+        <TransitionLink
           href={buildHref(new Set())}
           className={chipCls(selected.size === 0)}
         >
           전체
-        </Link>
+        </TransitionLink>
         {tags.map((t) => {
           const active = selected.has(t.id);
           const next = new Set(selected);
           if (active) next.delete(t.id);
           else next.add(t.id);
           return (
-            <Link key={t.id} href={buildHref(next)} className={chipCls(active)}>
+            <TransitionLink
+              key={t.id}
+              href={buildHref(next)}
+              className={chipCls(active)}
+            >
               {t.name}
-            </Link>
+            </TransitionLink>
           );
         })}
       </div>

@@ -31,10 +31,15 @@ export function DesignImageBoard({
 }: Props) {
   const [uploading, setUploading] = useState(0);
   const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [dropOver, setDropOver] = useState(false);
 
   useEffect(() => {
     onUploadingChange(uploading > 0);
   }, [uploading, onUploadingChange]);
+
+  function isFileDrag(e: React.DragEvent) {
+    return Array.from(e.dataTransfer.types).includes("Files");
+  }
 
   async function handleFiles(files: FileList) {
     const prefix = getSlug() || "untitled";
@@ -102,17 +107,47 @@ export function DesignImageBoard({
       <p className="text-caption text-stone">
         별표 = 대표이미지. 카드 드래그로 순서 변경. 첫 이미지가 자동으로 별표.
       </p>
-      <input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={(e) => {
-          const fs = e.target.files;
-          if (fs && fs.length > 0) handleFiles(fs);
-          e.target.value = "";
+      <label
+        onDragEnter={(e) => {
+          if (!isFileDrag(e)) return;
+          e.preventDefault();
+          setDropOver(true);
         }}
-        className="text-small text-stone"
-      />
+        onDragOver={(e) => {
+          if (!isFileDrag(e)) return;
+          e.preventDefault();
+        }}
+        onDragLeave={(e) => {
+          if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
+          setDropOver(false);
+        }}
+        onDrop={(e) => {
+          if (!isFileDrag(e)) return;
+          e.preventDefault();
+          setDropOver(false);
+          const fs = e.dataTransfer.files;
+          if (fs && fs.length > 0) handleFiles(fs);
+        }}
+        className={`flex flex-col items-center gap-1 border-2 border-dashed rounded-sm px-6 py-10 cursor-pointer transition-colors duration-150 ${
+          dropOver
+            ? "border-ink bg-canvas"
+            : "border-mist hover:border-stone bg-transparent"
+        }`}
+      >
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={(e) => {
+            const fs = e.target.files;
+            if (fs && fs.length > 0) handleFiles(fs);
+            e.target.value = "";
+          }}
+          className="sr-only"
+        />
+        <p className="text-body text-ink">이미지를 끌어다 놓거나 클릭</p>
+        <p className="text-caption text-stone">여러 장 동시 업로드 가능</p>
+      </label>
       {uploading > 0 && (
         <p className="text-small text-stone">업로드 중... ({uploading})</p>
       )}

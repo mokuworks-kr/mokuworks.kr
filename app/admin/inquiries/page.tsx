@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { PageHeader } from "@/components/admin/PageHeader";
+import { TransitionLink } from "@/components/TransitionLink";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -65,7 +66,7 @@ export default async function AdminInquiriesPage({
               ? buildSearchUrl({ q })
               : buildSearchUrl({ status: tab.value, q });
           return (
-            <Link
+            <TransitionLink
               key={tab.value}
               href={href}
               className={
@@ -75,7 +76,7 @@ export default async function AdminInquiriesPage({
               }
             >
               {tab.label}
-            </Link>
+            </TransitionLink>
           );
         })}
       </nav>
