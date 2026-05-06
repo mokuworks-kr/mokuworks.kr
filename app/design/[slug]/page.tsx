@@ -32,7 +32,7 @@ export async function generateMetadata({
     : `${design.title} — ${design.client}`;
 
   return {
-    title: `${design.title} | mokuworks`,
+    title: design.title,
     description: desc,
     openGraph: {
       title: design.title,

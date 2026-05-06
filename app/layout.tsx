@@ -14,12 +14,23 @@ const astaSans = Asta_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://mokuworks.kr"),
   title: {
     default: "mokuworks",
     template: "%s | mokuworks",
   },
   description:
     "1인 메이커 mokuworks의 그래픽 디자인 작업과 자체 웹앱 제품을 모은 사이트.",
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    siteName: "mokuworks",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-default.png"],
+  },
 };
 
 export default function RootLayout({

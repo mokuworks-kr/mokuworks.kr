@@ -28,7 +28,7 @@ export async function generateMetadata({
   if (!product) return { title: "Not Found" };
 
   return {
-    title: `${product.name} | mokuworks`,
+    title: product.name,
     description: product.tagline,
     openGraph: {
       title: product.name,
