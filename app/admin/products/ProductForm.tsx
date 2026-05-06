@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 
 import { createClient } from "@/lib/supabase/client";
 import { sanitizeFilename } from "@/lib/supabase/storage";
@@ -25,43 +25,78 @@ const inputCls =
   "bg-cloud text-ink rounded-sm px-4 py-3 text-body placeholder:text-fog focus:outline-none focus:ring-1 focus:ring-ink";
 const labelCls = "text-small text-stone";
 
+type ImageState =
+  | { kind: "empty" }
+  | { kind: "remote"; url: string }
+  | { kind: "pending"; objectUrl: string; file: File };
+
 export function ProductForm({ initial }: { initial?: ProductInitial }) {
-  const [imageUrl, setImageUrl] = useState<string | null>(
-    initial?.image_url ?? null,
+  const [imageState, setImageState] = useState<ImageState>(() =>
+    initial?.image_url
+      ? { kind: "remote", url: initial.image_url }
+      : { kind: "empty" },
   );
-  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const objectUrlRef = useRef<string | null>(null);
 
-  async function handleFile(file: File) {
-    setError(null);
-    setUploading(true);
-    try {
-      const supabase = createClient();
-      const path = sanitizeFilename(file.name);
-      const { error: upErr } = await supabase.storage
-        .from(BUCKET)
-        .upload(path, file, { upsert: true });
-      if (upErr) throw upErr;
-      const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-      setImageUrl(data.publicUrl);
-    } catch {
-      setError("이미지 업로드에 실패했습니다.");
-    } finally {
-      setUploading(false);
-    }
+  useEffect(() => {
+    return () => {
+      if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+    };
+  }, []);
+
+  function handleFile(file: File) {
+    if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+    const objectUrl = URL.createObjectURL(file);
+    objectUrlRef.current = objectUrl;
+    setImageState({ kind: "pending", objectUrl, file });
+  }
+
+  async function uploadPending(state: ImageState): Promise<string | null> {
+    if (state.kind === "empty") return null;
+    if (state.kind === "remote") return state.url;
+    const supabase = createClient();
+    const path = sanitizeFilename(state.file.name);
+    const { error: upErr } = await supabase.storage
+      .from(BUCKET)
+      .upload(path, state.file, { upsert: true });
+    if (upErr) throw upErr;
+    const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+    return data.publicUrl;
   }
 
   function onSubmit(formData: FormData) {
-    formData.set("image_url", imageUrl ?? "");
     startTransition(async () => {
       setError(null);
+      let url: string | null;
+      try {
+        url = await uploadPending(imageState);
+      } catch {
+        setError("이미지 업로드에 실패했습니다.");
+        return;
+      }
+      if (url && imageState.kind === "pending") {
+        if (objectUrlRef.current) {
+          URL.revokeObjectURL(objectUrlRef.current);
+          objectUrlRef.current = null;
+        }
+        setImageState({ kind: "remote", url });
+      }
+      formData.set("image_url", url ?? "");
       const res = initial
         ? await updateProduct(initial.id, formData)
         : await createProduct(formData);
       if (res && "error" in res) setError(res.error);
     });
   }
+
+  const previewUrl =
+    imageState.kind === "remote"
+      ? imageState.url
+      : imageState.kind === "pending"
+        ? imageState.objectUrl
+        : null;
 
   return (
     <form action={onSubmit} className="flex flex-col gap-6">
@@ -107,18 +142,22 @@ export function ProductForm({ initial }: { initial?: ProductInitial }) {
           }}
           className="text-small text-stone"
         />
-        {uploading && (
-          <p className="text-small text-stone">업로드 중...</p>
-        )}
-        {imageUrl && (
+        <p className="text-caption text-stone">저장 시 업로드됩니다.</p>
+        {previewUrl && (
           <div className="mt-2 relative w-48 aspect-[4/3] bg-cloud overflow-hidden rounded-sm">
             <Image
-              src={imageUrl}
+              src={previewUrl}
               alt="대표이미지 미리보기"
               fill
               sizes="192px"
+              unoptimized={imageState.kind === "pending"}
               className="object-cover"
             />
+            {imageState.kind === "pending" && (
+              <span className="absolute bottom-1.5 left-1.5 text-caption bg-paper/80 text-stone px-2 py-0.5 rounded-sm">
+                미업로드
+              </span>
+            )}
           </div>
         )}
       </Field>
@@ -161,7 +200,7 @@ export function ProductForm({ initial }: { initial?: ProductInitial }) {
 
       <button
         type="submit"
-        disabled={pending || uploading}
+        disabled={pending}
         className="bg-ink text-paper rounded-sm px-8 py-4 text-body font-medium hover:opacity-85 transition-opacity duration-150 disabled:opacity-50 self-start"
       >
         {pending ? "저장 중..." : "저장"}

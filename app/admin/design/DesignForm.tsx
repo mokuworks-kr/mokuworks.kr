@@ -1,9 +1,14 @@
 "use client";
 
-import { useCallback, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
+
+import { createClient } from "@/lib/supabase/client";
+import { sanitizeFilename } from "@/lib/supabase/storage";
 
 import { createDesign, updateDesign } from "./actions";
 import { DesignImageBoard, type ImageItem } from "./DesignImageBoard";
+
+const BUCKET = "design-images";
 
 export type DesignInitial = {
   id: string;
@@ -44,6 +49,25 @@ function buildInitialItems(initial?: DesignInitial): ImageItem[] {
   return items;
 }
 
+async function uploadPendingItems(items: ImageItem[]): Promise<ImageItem[]> {
+  const supabase = createClient();
+  const out: ImageItem[] = [];
+  for (const it of items) {
+    if (!it.pending) {
+      out.push(it);
+      continue;
+    }
+    const path = sanitizeFilename(it.pending.name);
+    const { error: upErr } = await supabase.storage
+      .from(BUCKET)
+      .upload(path, it.pending, { upsert: true });
+    if (upErr) throw upErr;
+    const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+    out.push({ key: it.key, url: data.publicUrl, starred: it.starred });
+  }
+  return out;
+}
+
 export function DesignForm({
   initial,
   tags,
@@ -57,13 +81,8 @@ export function DesignForm({
   const [selectedTagIds, setSelectedTagIds] = useState<Set<string>>(
     () => new Set(initial?.tags ?? []),
   );
-  const [uploadingBusy, setUploadingBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
-
-  const handleUploadingChange = useCallback((busy: boolean) => {
-    setUploadingBusy(busy);
-  }, []);
 
   function toggleTag(id: string) {
     setSelectedTagIds((prev) => {
@@ -75,14 +94,23 @@ export function DesignForm({
   }
 
   function onSubmit(formData: FormData) {
-    const starred = items.find((it) => it.starred);
-    const gallery = items.filter((it) => !it.starred).map((it) => it.url);
-    formData.set("image_url", starred?.url ?? "");
-    formData.set("gallery", JSON.stringify(gallery));
-    formData.set("tags", JSON.stringify(Array.from(selectedTagIds)));
-
     startTransition(async () => {
       setError(null);
+      let uploaded: ImageItem[];
+      try {
+        uploaded = await uploadPendingItems(items);
+      } catch {
+        setError("이미지 업로드에 실패했습니다.");
+        return;
+      }
+      setItems(uploaded);
+
+      const starred = uploaded.find((it) => it.starred);
+      const gallery = uploaded.filter((it) => !it.starred).map((it) => it.url);
+      formData.set("image_url", starred?.url ?? "");
+      formData.set("gallery", JSON.stringify(gallery));
+      formData.set("tags", JSON.stringify(Array.from(selectedTagIds)));
+
       const res = initial
         ? await updateDesign(initial.id, formData)
         : await createDesign(formData);
@@ -167,12 +195,7 @@ export function DesignForm({
 
       <fieldset className="flex flex-col gap-3">
         <legend className={labelCls}>이미지</legend>
-        <DesignImageBoard
-          items={items}
-          setItems={setItems}
-          onError={setError}
-          onUploadingChange={handleUploadingChange}
-        />
+        <DesignImageBoard items={items} setItems={setItems} />
       </fieldset>
 
       <label className="flex items-center gap-2">
@@ -192,7 +215,7 @@ export function DesignForm({
 
       <button
         type="submit"
-        disabled={pending || uploadingBusy}
+        disabled={pending}
         className="bg-ink text-paper rounded-sm px-8 py-4 text-body font-medium hover:opacity-85 transition-opacity duration-150 disabled:opacity-50 self-start"
       >
         {pending ? "저장 중..." : "저장"}

@@ -1,73 +1,56 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
-
-import { createClient } from "@/lib/supabase/client";
-import { sanitizeFilename } from "@/lib/supabase/storage";
-
-const BUCKET = "design-images";
+import { useEffect, useRef, useState } from "react";
 
 export type ImageItem = {
   key: string;
   url: string;
   starred: boolean;
+  pending?: File;
 };
 
 type Props = {
   items: ImageItem[];
   setItems: React.Dispatch<React.SetStateAction<ImageItem[]>>;
-  onError: (msg: string | null) => void;
-  onUploadingChange: (busy: boolean) => void;
 };
 
-export function DesignImageBoard({
-  items,
-  setItems,
-  onError,
-  onUploadingChange,
-}: Props) {
-  const [uploading, setUploading] = useState(0);
+export function DesignImageBoard({ items, setItems }: Props) {
   const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
   const [dropOver, setDropOver] = useState(false);
+  const objectUrlsRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    onUploadingChange(uploading > 0);
-  }, [uploading, onUploadingChange]);
+    const urls = objectUrlsRef.current;
+    return () => {
+      urls.forEach((u) => URL.revokeObjectURL(u));
+      urls.clear();
+    };
+  }, []);
 
   function isFileDrag(e: React.DragEvent) {
     return Array.from(e.dataTransfer.types).includes("Files");
   }
 
-  async function handleFiles(files: FileList) {
-    const supabase = createClient();
-    onError(null);
-
+  function addFiles(files: FileList) {
+    const newItems: ImageItem[] = [];
     for (const file of Array.from(files)) {
-      setUploading((n) => n + 1);
-      try {
-        const path = sanitizeFilename(file.name);
-        const { error: upErr } = await supabase.storage
-          .from(BUCKET)
-          .upload(path, file, { upsert: true });
-        if (upErr) throw upErr;
-        const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-        setItems((prev) => {
-          const next = [
-            ...prev,
-            { key: data.publicUrl, url: data.publicUrl, starred: false },
-          ];
-          if (!next.some((it) => it.starred)) {
-            next[0] = { ...next[0], starred: true };
-          }
-          return next;
-        });
-      } catch {
-        onError("이미지 업로드에 실패했습니다.");
-      } finally {
-        setUploading((n) => n - 1);
-      }
+      const objectUrl = URL.createObjectURL(file);
+      objectUrlsRef.current.add(objectUrl);
+      newItems.push({
+        key: crypto.randomUUID(),
+        url: objectUrl,
+        starred: false,
+        pending: file,
+      });
     }
+    setItems((prev) => {
+      const next = [...prev, ...newItems];
+      if (!next.some((it) => it.starred) && next.length > 0) {
+        next[0] = { ...next[0], starred: true };
+      }
+      return next;
+    });
   }
 
   function star(idx: number) {
@@ -77,6 +60,10 @@ export function DesignImageBoard({
   function remove(idx: number) {
     setItems((prev) => {
       const removed = prev[idx];
+      if (removed?.pending && objectUrlsRef.current.has(removed.url)) {
+        URL.revokeObjectURL(removed.url);
+        objectUrlsRef.current.delete(removed.url);
+      }
       const next = prev.filter((_, i) => i !== idx);
       if (removed?.starred && next.length > 0) {
         next[0] = { ...next[0], starred: true };
@@ -103,6 +90,7 @@ export function DesignImageBoard({
     <div className="flex flex-col gap-3">
       <p className="text-caption text-stone">
         별표 = 대표이미지. 카드 드래그로 순서 변경. 첫 이미지가 자동으로 별표.
+        저장 시 업로드됩니다.
       </p>
       <label
         onDragEnter={(e) => {
@@ -123,7 +111,7 @@ export function DesignImageBoard({
           e.preventDefault();
           setDropOver(false);
           const fs = e.dataTransfer.files;
-          if (fs && fs.length > 0) handleFiles(fs);
+          if (fs && fs.length > 0) addFiles(fs);
         }}
         className={`flex flex-col items-center gap-1 border-2 border-dashed rounded-sm px-6 py-10 cursor-pointer transition-colors duration-150 ${
           dropOver
@@ -137,17 +125,14 @@ export function DesignImageBoard({
           multiple
           onChange={(e) => {
             const fs = e.target.files;
-            if (fs && fs.length > 0) handleFiles(fs);
+            if (fs && fs.length > 0) addFiles(fs);
             e.target.value = "";
           }}
           className="sr-only"
         />
         <p className="text-body text-ink">이미지를 끌어다 놓거나 클릭</p>
-        <p className="text-caption text-stone">여러 장 동시 업로드 가능</p>
+        <p className="text-caption text-stone">여러 장 동시 추가 가능</p>
       </label>
-      {uploading > 0 && (
-        <p className="text-small text-stone">업로드 중... ({uploading})</p>
-      )}
       {items.length > 0 && (
         <ul className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {items.map((it, idx) => (
@@ -167,6 +152,7 @@ export function DesignImageBoard({
                 alt=""
                 fill
                 sizes="(max-width: 768px) 50vw, 200px"
+                unoptimized={Boolean(it.pending)}
                 className="object-cover pointer-events-none"
               />
               <div className="absolute inset-x-0 top-0 flex justify-between p-1.5">
@@ -193,6 +179,11 @@ export function DesignImageBoard({
                   ×
                 </button>
               </div>
+              {it.pending && (
+                <span className="absolute bottom-1.5 left-1.5 text-caption bg-paper/80 text-stone px-2 py-0.5 rounded-sm">
+                  미업로드
+                </span>
+              )}
             </li>
           ))}
         </ul>
