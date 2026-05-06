@@ -12,8 +12,12 @@ type InquiryEmail = {
 export async function sendInquiryNotification(payload: InquiryEmail) {
   const apiKey = process.env.RESEND_API_KEY;
   const adminEmail = process.env.ADMIN_EMAIL;
+  const fromAddr = process.env.EMAIL_FROM ?? "mokuworks <onboarding@resend.dev>";
 
   if (!apiKey || !adminEmail) {
+    console.warn(
+      "[email] RESEND_API_KEY or ADMIN_EMAIL missing — notification skipped",
+    );
     return { skipped: true as const };
   }
 
@@ -39,7 +43,7 @@ export async function sendInquiryNotification(payload: InquiryEmail) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "mokuworks <onboarding@resend.dev>",
+      from: fromAddr,
       to: [adminEmail],
       reply_to: payload.email,
       subject: `[mokuworks] 새 문의 — ${payload.name}`,
@@ -48,6 +52,8 @@ export async function sendInquiryNotification(payload: InquiryEmail) {
   });
 
   if (!res.ok) {
+    const detail = await res.text().catch(() => "");
+    console.error("[email] Resend send failed:", res.status, detail);
     return { skipped: false as const, ok: false as const };
   }
   return { skipped: false as const, ok: true as const };
