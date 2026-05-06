@@ -15,10 +15,14 @@ export default async function AdminDashboardPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { count: newInquiriesCount } = await supabase
-    .from("inquiries")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "new");
+  const [{ count: newInquiriesCount }, { count: productsCount }] =
+    await Promise.all([
+      supabase
+        .from("inquiries")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "new"),
+      supabase.from("products").select("*", { count: "exact", head: true }),
+    ]);
 
   return (
     <section className="px-4 md:px-8 py-16 max-w-3xl">
@@ -27,7 +31,7 @@ export default async function AdminDashboardPage() {
         <form action={logout}>
           <button
             type="submit"
-            className="text-small text-stone hover:text-ink hover:opacity-100 transition-colors duration-150"
+            className="text-small text-stone hover:text-ink transition-colors duration-150"
           >
             로그아웃
           </button>
@@ -36,32 +40,51 @@ export default async function AdminDashboardPage() {
 
       <p className="mt-2 text-small text-stone">{user?.email}</p>
 
-      <div className="mt-12 grid gap-6 md:grid-cols-3">
-        <DashboardStat
+      <nav className="mt-12 grid gap-6 md:grid-cols-2">
+        <DashboardCard
           label="미답변 문의"
           value={`${newInquiriesCount ?? 0}건`}
           href="/admin/inquiries"
         />
-        <DashboardStat label="디자인 작업" value="관리" href="/admin/designs" />
-        <DashboardStat label="제품" value="관리" href="/admin/products" />
-      </div>
-
-      <p className="mt-16 text-small text-stone">
-        디자인/제품/태그/문의 페이지는 v1 다음 단계에서 추가됩니다.
-      </p>
+        <DashboardCard
+          label="제품"
+          value={`${productsCount ?? 0}개`}
+          href="/admin/products"
+        />
+        <DashboardCard
+          label="태그"
+          value="관리"
+          href="/admin/tags"
+        />
+        <DashboardCard
+          label="디자인 작업"
+          value="준비 중"
+          disabled
+        />
+      </nav>
     </section>
   );
 }
 
-function DashboardStat({
+function DashboardCard({
   label,
   value,
   href,
+  disabled,
 }: {
   label: string;
   value: string;
-  href: string;
+  href?: string;
+  disabled?: boolean;
 }) {
+  if (disabled) {
+    return (
+      <div className="block bg-canvas p-6 rounded-sm opacity-50 cursor-not-allowed">
+        <p className="text-small text-stone">{label}</p>
+        <p className="mt-2 text-title font-medium text-stone">{value}</p>
+      </div>
+    );
+  }
   return (
     <a
       href={href}
