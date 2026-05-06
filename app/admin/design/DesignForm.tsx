@@ -65,11 +65,6 @@ export function DesignForm({
     setUploadingBusy(busy);
   }, []);
 
-  const getSlug = useCallback(() => {
-    const el = document.getElementById("slug") as HTMLInputElement | null;
-    return el?.value.trim() ?? "";
-  }, []);
-
   function toggleTag(id: string) {
     setSelectedTagIds((prev) => {
       const next = new Set(prev);
@@ -175,7 +170,6 @@ export function DesignForm({
         <DesignImageBoard
           items={items}
           setItems={setItems}
-          getSlug={getSlug}
           onError={setError}
           onUploadingChange={handleUploadingChange}
         />

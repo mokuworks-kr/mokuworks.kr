@@ -38,11 +38,7 @@ export function ProductForm({ initial }: { initial?: ProductInitial }) {
     setUploading(true);
     try {
       const supabase = createClient();
-      const slugInput = (
-        document.getElementById("slug") as HTMLInputElement | null
-      )?.value;
-      const prefix = slugInput?.trim() || "untitled";
-      const path = `${prefix}/${Date.now()}-${sanitizeFilename(file.name)}`;
+      const path = sanitizeFilename(file.name);
       const { error: upErr } = await supabase.storage
         .from(BUCKET)
         .upload(path, file, { upsert: true });

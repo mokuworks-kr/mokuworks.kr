@@ -17,7 +17,6 @@ export type ImageItem = {
 type Props = {
   items: ImageItem[];
   setItems: React.Dispatch<React.SetStateAction<ImageItem[]>>;
-  getSlug: () => string;
   onError: (msg: string | null) => void;
   onUploadingChange: (busy: boolean) => void;
 };
@@ -25,7 +24,6 @@ type Props = {
 export function DesignImageBoard({
   items,
   setItems,
-  getSlug,
   onError,
   onUploadingChange,
 }: Props) {
@@ -42,14 +40,13 @@ export function DesignImageBoard({
   }
 
   async function handleFiles(files: FileList) {
-    const prefix = getSlug() || "untitled";
     const supabase = createClient();
     onError(null);
 
     for (const file of Array.from(files)) {
       setUploading((n) => n + 1);
       try {
-        const path = `${prefix}/${Date.now()}-${sanitizeFilename(file.name)}`;
+        const path = sanitizeFilename(file.name);
         const { error: upErr } = await supabase.storage
           .from(BUCKET)
           .upload(path, file, { upsert: true });
