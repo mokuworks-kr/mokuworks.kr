@@ -88,7 +88,7 @@ export function DesignCatalog({
   }
 
   return (
-    <section className="px-4 md:px-8 py-12">
+    <section className="mx-auto max-w-page px-4 md:px-8 py-12">
       <h1 className="sr-only">Design</h1>
 
       <input

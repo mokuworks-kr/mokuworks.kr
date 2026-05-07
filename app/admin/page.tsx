@@ -29,7 +29,7 @@ export default async function AdminDashboardPage() {
   ]);
 
   return (
-    <section className="px-4 md:px-8 py-16 max-w-3xl">
+    <section className="mx-auto max-w-page px-4 md:px-8 py-16">
       <header className="flex items-baseline justify-between">
         <h1 className="text-title font-medium text-ink">관리자</h1>
         <form action={logout}>

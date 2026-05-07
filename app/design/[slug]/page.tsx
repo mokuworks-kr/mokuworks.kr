@@ -66,8 +66,8 @@ export default async function DesignDetailPage({
   );
 
   return (
-    <article>
-      <header className="px-4 md:px-8 py-12 md:py-16 max-w-3xl">
+    <article className="mx-auto max-w-page">
+      <header className="px-4 md:px-8 py-12 md:py-16">
         <h1 className="text-heading font-semibold text-ink leading-tight">
           {design.title}
         </h1>

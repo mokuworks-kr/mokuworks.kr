@@ -44,7 +44,7 @@ export default async function InquiryDetailPage({
   );
 
   return (
-    <section className="px-4 md:px-8 py-16 max-w-2xl">
+    <section className="mx-auto max-w-page px-4 md:px-8 py-16">
       <PageHeader
         title="문의 상세"
         back={{ href: "/admin/inquiries", label: "← 목록" }}

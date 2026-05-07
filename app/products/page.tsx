@@ -19,7 +19,7 @@ export default async function ProductsIndexPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <section className="px-4 md:px-8 py-12">
+    <section className="mx-auto max-w-page px-4 md:px-8 py-12">
       <h1 className="sr-only">Products</h1>
 
       {!products || products.length === 0 ? (

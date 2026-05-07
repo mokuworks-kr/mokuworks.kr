@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AdminLoginPage() {
   return (
-    <section className="px-4 md:px-8 py-24 max-w-md">
+    <section className="mx-auto max-w-page px-4 md:px-8 py-24">
       <h1 className="text-title font-medium text-ink">관리자 로그인</h1>
       <p className="mt-2 text-small text-stone">
         moku 본인만 사용해요.

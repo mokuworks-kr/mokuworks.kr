@@ -48,8 +48,8 @@ export default async function ProductPage({
   if (!product) notFound();
 
   return (
-    <article>
-      <header className="px-4 md:px-8 py-16 md:py-24 max-w-3xl">
+    <article className="mx-auto max-w-page">
+      <header className="px-4 md:px-8 py-16 md:py-24">
         <h1 className="text-heading font-semibold text-ink leading-tight">
           {product.name}
         </h1>

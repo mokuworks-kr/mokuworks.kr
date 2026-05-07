@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function NewProductPage() {
   return (
-    <section className="px-4 md:px-8 py-16 max-w-2xl">
+    <section className="mx-auto max-w-page px-4 md:px-8 py-16">
       <PageHeader
         title="새 제품"
         back={{ href: "/admin/products", label: "← 목록" }}
