@@ -188,6 +188,21 @@ Tailwind 클래스: `max-w-page mx-auto` (Tailwind v4 `--container-*` 토큰 →
 - **반응형**: `lg` (1024px) 미만에서는 단일 컬럼으로 stack. 우측 블록에 `mt-12 lg:mt-0`로 세로 간격 보정.
 - **적용 페이지**: `/design/[slug]`, `/contact`. 좌측에 제목·메타·짧은 안내·연락 채널, 우측에 이미지 갤러리 또는 폼.
 
+### 도형 (Border Radius)
+
+요소가 페이지 흐름에서 떨어져 있을수록 radius가 커진다는 단일 원칙으로 통일한다. 세 개 tier만 사용하고 ad hoc 혼용은 금지.
+
+| Tier | 값 | 적용 |
+|---|---|---|
+| **Stroke** | `0` (radius 없음) | 검색·필터 인풋. 하단 1px 보더만, 시각 무게 가장 가벼움. |
+| **Filled (sm)** | `--radius-sm` (4px) | 페이지 흐름 안의 인터랙티브 블록 — 폼 인풋, 1차/2차 버튼. |
+| **Floating (pill)** | `--radius-pill` (9999px) | 페이지에서 떨어져 떠 있는 요소 — 필터 칩, 뱃지, 모바일 하단 플로팅 네비게이션. |
+
+원칙:
+- **Stroke vs Filled vs Floating** 셋 중 어느 카테고리에 해당하는지 먼저 판단한 뒤 그 tier의 radius를 적용한다.
+- `--radius-md` (8px) 토큰은 정의는 유지하되 spec에서 사용처 없음 (legacy).
+- disclosure 펼침 panel 같은 보조 영역은 inline 확장으로 처리해 별도 floating box를 만들지 않는다 — 그래야 tier 추가 없이 시스템 유지 가능.
+
 ---
 
 ## 5. 컴포넌트
@@ -322,7 +337,7 @@ border-radius: 9999px (완전 둥근)
 높이: 64px
 배경: --color-paper (스크롤 시에도 동일)
 좌측: mokuworks 로고 이미지 (`public/logo.svg`)
-  - 높이: 20px (모바일/데스크톱 동일, width 비율 자동)
+  - 높이: 모바일 16px (`h-4`) / 데스크톱 20px (`h-5`), width 비율 자동
   - 호버: opacity 0.6
 우측 (md 이상만): Design / Products / About / Contact (16px, weight 400, --color-ink)
   - 호버: opacity 0.6
@@ -346,31 +361,39 @@ border-radius: 9999px (완전 둥근)
 
 ### 5.8 모바일 하단 플로팅 네비게이션
 
-모바일(< md)에서만 노출되는 floating pill로, 헤더에서 빠진 메뉴 4개를 담는다. 데스크톱에서는 표시되지 않음(`md:hidden`).
+모바일(< md)에서만 노출되는 capsule(pill) nav로, 헤더에서 빠진 메뉴 4개를 담는다. 데스크톱에서는 표시되지 않음(`md:hidden`).
 
 ```
 표시 조건: viewport < 768px (md 미만)
-위치: position: fixed; bottom: 24px; 좌우 가운데 정렬
-폭: calc(100vw - 32px)  — 좌우 16px gutter, 모바일 페이지 패딩과 맞춤
-배경: --color-paper
-보더: 1px --color-mist
-border-radius: 8px (--radius-md)
+위치: position: fixed; bottom: 24px; left: 16px; right: 16px (가로 풀폭, 좌우 16px gutter)
+배경: --color-paper at 70% alpha (`bg-paper/70`)
+backdrop-filter: blur ~12px (`backdrop-blur-md`)
+보더: 1px --color-mist at 60% alpha (`border-mist/60`)
+border-radius: 9999px (--radius-pill, capsule 형태)
 패딩: 12px 16px
 z-index: 40
 콘텐츠: Design / Products / About / Contact
-  - 가로 균등 배치 (justify-around)
+  - 가로 균등 배치 (justify-around) + gap-6
   - 16px / weight 400 / --color-ink
   - 호버: opacity 0.6
   - 현재 페이지: opacity 0.6 (헤더 메뉴와 동일한 약한 활성 표시)
+  - 항목 수가 늘어 폭을 초과하면 가로 슬라이드 (`overflow-x-auto`, 스크롤바 숨김)
 ```
+
+스크롤 인터랙션:
+- 페이지 상단(scroll < 100px)에서는 nav가 숨겨져 있다 (`opacity-0 translate-y-2`).
+- 100px 이상 스크롤 시 fade-in + 8px 슬라이드업으로 등장 (`transition-all duration-300 ease-out`).
+- 다시 100px 미만으로 돌아오면 fade-out.
+- 의도: 첫 화면을 깨끗하게, 콘텐츠 탐색 중일 때만 메뉴 노출. 데스크톱 헤더가 스크롤로 사라지는 것과 대칭되는 모바일 패턴.
 
 레이아웃 보정:
 - `<body>`에 `pb-24 md:pb-0` (모바일 96px 하단 패딩) 적용해 푸터·콘텐츠가 pill에 가려지지 않게 한다.
-- pill 자체에는 그림자·블러 사용 안 함 — 1px hairline border만으로 분리 (브랜드 톤).
+- backdrop-blur로 뒤 콘텐츠를 부드럽게 흐리게 — 시각 무게 최소화 + 떠 있는 느낌 강조.
 
 원칙:
 - 사이트 전역 검색이 없으므로 minimalissimo와 달리 검색 입력은 두지 않는다. 메뉴 4개만 단순 가로 배치.
-- 햄버거 + 풀스크린 오버레이 패턴은 사용하지 않는다 — 메뉴 항목 수가 적어 항상 노출이 더 직관적.
+- 햄버거 + 풀스크린 오버레이 패턴은 사용하지 않는다 — 메뉴 항목 수가 적어 노출 시 항상 보이는 게 더 직관적.
+- pill 형태 + blur 처리는 §4 도형 시스템의 "Floating" tier에 해당. 필터 칩과 동일 radius philosophy로 일관됨.
 
 ---
 
@@ -421,7 +444,8 @@ z-index: 40
 ### 모바일 우선 고려사항
 
 - 본문 폰트 최소 16px 유지 (iOS 자동 zoom 방지)
-- 헤더는 모바일에서 **로고만 표시**. 4개 메뉴는 §5.8의 하단 플로팅 pill로 분리 — 헤더 우측 공간 정리, 로고는 데스크톱과 동일한 20px 유지.
+- 헤더는 모바일에서 **로고만 표시** (16px). 4개 메뉴는 §5.8의 하단 플로팅 pill로 분리 — 헤더 우측 공간 정리.
+- §5.3 필터 칩(industry / work type)은 모바일에서 disclosure 패턴으로 접힘. 닫힌 상태는 stroke 토글(선택 0개=라벨 / 1개 이상=선택 태그명만 truncate). md+에서는 inline 노출 그대로.
 - 좌우 패딩: 모바일 16px / 데스크톱 32px
 - 작품 상세 풀블리드 이미지는 모바일에서도 진짜 풀블리드 (좌우 패딩 0)
 - `<body>`에 `pb-24 md:pb-0`로 하단 플로팅 pill이 콘텐츠/푸터를 가리지 않게 한다.
