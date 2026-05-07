@@ -26,7 +26,7 @@ type Props = {
   initialFields: string[];
 };
 
-type OpenId = "field" | "format" | null;
+type OpenId = "field" | "format" | "all" | null;
 
 export function DesignCatalog({
   designs,
@@ -128,7 +128,17 @@ export function DesignCatalog({
             placeholder="제목·클라이언트·설명 검색"
             className="md:flex-1 bg-transparent text-ink py-3 text-body placeholder:text-fog focus:outline-none"
           />
-          <div className="flex items-center gap-6">
+          {(fields.length > 0 || formats.length > 0) && (
+            <div className="md:hidden">
+              <ChipTrigger
+                label="필터"
+                count={fieldFilters.size + formatFilters.size}
+                open={openId === "all"}
+                onClick={() => toggleOpen("all")}
+              />
+            </div>
+          )}
+          <div className="hidden md:flex items-center gap-6">
             {fields.length > 0 && (
               <ChipTrigger
                 label="Field"
@@ -149,7 +159,7 @@ export function DesignCatalog({
         </div>
 
         {openId === "field" && (
-          <div className="mt-4">
+          <div className="hidden md:block mt-4">
             <ChipPanel
               tags={fields}
               selected={fieldFilters}
@@ -159,13 +169,39 @@ export function DesignCatalog({
           </div>
         )}
         {openId === "format" && (
-          <div className="mt-4">
+          <div className="hidden md:block mt-4">
             <ChipPanel
               tags={formats}
               selected={formatFilters}
               onClear={() => setFormatFilters(new Set())}
               onToggle={(id) => setFormatFilters((s) => toggle(s, id))}
             />
+          </div>
+        )}
+        {openId === "all" && (
+          <div className="md:hidden mt-4 flex flex-col gap-6">
+            {fields.length > 0 && (
+              <div>
+                <p className="text-caption text-stone mb-2">Field</p>
+                <ChipPanel
+                  tags={fields}
+                  selected={fieldFilters}
+                  onClear={() => setFieldFilters(new Set())}
+                  onToggle={(id) => setFieldFilters((s) => toggle(s, id))}
+                />
+              </div>
+            )}
+            {formats.length > 0 && (
+              <div>
+                <p className="text-caption text-stone mb-2">Format</p>
+                <ChipPanel
+                  tags={formats}
+                  selected={formatFilters}
+                  onClear={() => setFormatFilters(new Set())}
+                  onToggle={(id) => setFormatFilters((s) => toggle(s, id))}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>

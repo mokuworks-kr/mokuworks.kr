@@ -319,9 +319,9 @@ border-radius: 0
 
 ```
 배치 (한 행, border-b mist 공유):
-  [검색 input (flex-1)]   [Field ▾]   [Format ▾]
+  md+:    [검색 input (flex-1)]   [Field ▾]   [Format ▾]
+  md 미만: [검색 input (flex-1)]                  [필터 ▾]
   ↑ 좌측: stroke search input — §5.2 Search/Filter input 토큰
-  ↑ 우측: ChipTrigger × 2 — 텍스트 버튼 (ghost-like)
 
 ChipTrigger:
   py-3, text-small, gap-1.5
@@ -335,11 +335,13 @@ ChipTrigger:
   트리거 버튼 클릭은 border 색을 바꾸지 않는다 (검색 affordance 유지)
 
 반응형:
-  md+: input · 트리거 · 트리거가 한 행. 트리거 사이 gap-6.
-  md 미만: input은 풀폭 첫 줄, 트리거 두 개가 둘째 줄. 같은 border-b 공유.
+  md+: input + Field 트리거 + Format 트리거가 한 행. 트리거 두 개 분리 노출 — 가로 공간이 넉넉해 한눈 파악 우선.
+  md 미만: input과 단일 "필터" 트리거가 한 행 공유. 카운트는 Field+Format 합. 한 손 시야 안에 머무는 단일 진입점으로 시각 무게 최소화.
 ```
 
-패널은 트리거 바로 아래에 inline으로 펼쳐진다 (push, not floating). 다른 트리거를 누르면 그쪽이 열리고 이전 패널은 닫힘. 외부 클릭·Esc로도 닫힘.
+패널은 트리거 바로 아래에 inline으로 펼쳐진다 (push, not floating). 데스크톱은 트리거가 둘이라 어느 쪽을 눌렀느냐에 따라 해당 그룹의 chips만 표시. 모바일은 트리거 하나라 펼치면 Field / Format 두 그룹이 caption 라벨(text-caption text-stone)과 함께 stack — 한 번에 다 보고 다 고를 수 있어 모달 없이도 충분한 작업 공간 확보. 다른 트리거를 누르면 그쪽이 열리고 이전 패널은 닫힘. 외부 클릭·Esc로도 닫힘.
+
+**왜 모바일에서 모달이 아닌가**: 풀스크린 #000 overlay는 시각 무게가 무거워 사이트의 ghost-like UI 철학과 충돌. floating tier도 추가됨(§4 회피 원칙). inline 단일 트리거 + 통합 패널이 더 적은 chrome으로 같은 정리 효과를 낸다.
 
 #### 5.3.2 칩 자체 (panel 내부)
 
