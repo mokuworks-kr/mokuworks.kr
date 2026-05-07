@@ -11,7 +11,7 @@ const NAV_ITEMS = [
 export function Header() {
   return (
     <header className="h-16 bg-paper">
-      <div className="mx-auto max-w-page h-full flex items-center justify-between px-4 md:px-8">
+      <div className="h-full flex items-center justify-between px-4 md:px-8">
         <Link
           href="/"
           aria-label="mokuworks 홈"

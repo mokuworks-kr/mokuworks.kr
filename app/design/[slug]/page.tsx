@@ -66,40 +66,42 @@ export default async function DesignDetailPage({
   );
 
   return (
-    <article className="mx-auto max-w-page">
-      <header className="px-4 md:px-8 py-12 md:py-16">
-        <h1 className="text-heading font-semibold text-ink leading-tight">
-          {design.title}
-        </h1>
-        <p className="mt-4 text-small text-stone">
-          {design.client} · {design.date}
-          {tagNames.length > 0 ? ` · ${tagNames.join(", ")}` : ""}
-        </p>
-        {design.description?.trim() && (
-          <p className="mt-8 text-body text-ink leading-relaxed whitespace-pre-line">
-            {design.description}
+    <article className="mx-auto max-w-page px-4 md:px-8">
+      <div className="py-12 md:py-16 lg:grid lg:grid-cols-3 lg:gap-12">
+        <header className="lg:sticky lg:top-8 lg:self-start">
+          <h1 className="text-heading font-semibold text-ink leading-tight">
+            {design.title}
+          </h1>
+          <p className="mt-4 text-small text-stone">
+            {design.client} · {design.date}
+            {tagNames.length > 0 ? ` · ${tagNames.join(", ")}` : ""}
           </p>
+          {design.description?.trim() && (
+            <p className="mt-8 text-body text-ink leading-relaxed whitespace-pre-line">
+              {design.description}
+            </p>
+          )}
+        </header>
+
+        {images.length > 0 && (
+          <div className="mt-12 lg:mt-0 lg:col-span-2 flex flex-col gap-2">
+            {images.map((url) => (
+              <div key={url} className="relative w-full bg-cloud">
+                <Image
+                  src={url}
+                  alt=""
+                  width={2000}
+                  height={2000}
+                  sizes="(min-width: 1024px) 1200px, 100vw"
+                  className="w-full h-auto"
+                />
+              </div>
+            ))}
+          </div>
         )}
-      </header>
+      </div>
 
-      {images.length > 0 && (
-        <div className="flex flex-col">
-          {images.map((url) => (
-            <div key={url} className="relative w-full bg-cloud">
-              <Image
-                src={url}
-                alt=""
-                width={2000}
-                height={2000}
-                sizes="100vw"
-                className="w-full h-auto"
-              />
-            </div>
-          ))}
-        </div>
-      )}
-
-      <footer className="px-4 md:px-8 py-16 md:py-24">
+      <footer className="py-16 md:py-24">
         <Link
           href="/design"
           className="text-body text-ink hover:opacity-60 transition-opacity duration-150"

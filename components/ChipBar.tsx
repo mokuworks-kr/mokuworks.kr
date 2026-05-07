@@ -13,7 +13,7 @@ type Props = {
 export function ChipBar({ label, tags, selected, onClear, onToggle }: Props) {
   if (tags.length === 0) return null;
   return (
-    <div className="mt-6 flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
       <p className="text-caption text-stone">{label}</p>
       <div className="flex flex-wrap gap-2">
         <button

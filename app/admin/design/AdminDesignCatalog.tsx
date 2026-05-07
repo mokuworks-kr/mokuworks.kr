@@ -97,23 +97,25 @@ export function AdminDesignCatalog({
         value={q}
         onChange={(e) => setQ(e.target.value)}
         placeholder="제목·클라이언트·설명 검색"
-        className="mt-8 w-full max-w-2xl bg-cloud text-ink rounded-sm px-4 py-2 text-body placeholder:text-fog focus:outline-none focus:ring-1 focus:ring-ink"
+        className="mt-8 w-full bg-transparent text-ink border-b border-mist py-3 text-body placeholder:text-fog focus:outline-none focus:border-ink transition-colors"
       />
 
-      <ChipBar
-        label="Industry"
-        tags={industries}
-        selected={industryFilters}
-        onClear={() => setIndustryFilters(new Set())}
-        onToggle={(id) => setIndustryFilters((s) => toggle(s, id))}
-      />
-      <ChipBar
-        label="Work Type"
-        tags={types}
-        selected={typeFilters}
-        onClear={() => setTypeFilters(new Set())}
-        onToggle={(id) => setTypeFilters((s) => toggle(s, id))}
-      />
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <ChipBar
+          label="Industry"
+          tags={industries}
+          selected={industryFilters}
+          onClear={() => setIndustryFilters(new Set())}
+          onToggle={(id) => setIndustryFilters((s) => toggle(s, id))}
+        />
+        <ChipBar
+          label="Work Type"
+          tags={types}
+          selected={typeFilters}
+          onClear={() => setTypeFilters(new Set())}
+          onToggle={(id) => setTypeFilters((s) => toggle(s, id))}
+        />
+      </div>
 
       {filtered.length === 0 ? (
         <p className="mt-12 text-small text-stone">

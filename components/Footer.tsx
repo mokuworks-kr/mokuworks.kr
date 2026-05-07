@@ -5,7 +5,7 @@ export function Footer() {
 
   return (
     <footer className="bg-paper border-t border-mist">
-      <div className="mx-auto max-w-page px-4 md:px-8 py-16 flex flex-col gap-6">
+      <div className="px-4 md:px-8 py-16 flex flex-col gap-6">
         <p className="text-small text-stone max-w-prose">
           mokuworks — 1인 메이커가 디자인하고 만드는 모든 것.
         </p>
