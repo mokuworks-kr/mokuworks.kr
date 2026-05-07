@@ -29,13 +29,13 @@ export default async function InquiryDetailPage({
 
   if (!inquiry) notFound();
 
-  const { data: typeTags } = await supabase
+  const { data: formatTags } = await supabase
     .from("tags")
     .select("id, name")
-    .eq("category", "type");
-  const tagMap = new Map((typeTags ?? []).map((t) => [t.id, t.name]));
+    .eq("category", "format");
+  const tagMap = new Map((formatTags ?? []).map((t) => [t.id, t.name]));
 
-  const workNames = (inquiry.work_types ?? []).map((t) =>
+  const formatNames = (inquiry.formats ?? []).map((t) =>
     t === "other" ? "기타" : (tagMap.get(t) ?? "—"),
   );
 
@@ -65,10 +65,10 @@ export default async function InquiryDetailPage({
           </a>
         </Row>
         {inquiry.company && <Row label="회사 / 소속">{inquiry.company}</Row>}
-        {workNames.length > 0 && (
-          <Row label="작업 종류">{workNames.join(", ")}</Row>
+        {formatNames.length > 0 && (
+          <Row label="포맷">{formatNames.join(", ")}</Row>
         )}
-        {inquiry.work_other && <Row label="기타 작업">{inquiry.work_other}</Row>}
+        {inquiry.work_other && <Row label="기타 포맷">{inquiry.work_other}</Row>}
         {inquiry.budget_range && <Row label="예산">{inquiry.budget_range}</Row>}
         {inquiry.timeline && <Row label="일정">{inquiry.timeline}</Row>}
         <Row label="받은 시각">

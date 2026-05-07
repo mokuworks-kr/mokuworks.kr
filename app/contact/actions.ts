@@ -20,9 +20,9 @@ export async function submitInquiry(
   const message = String(formData.get("message") ?? "").trim();
   const budgetRange = String(formData.get("budget_range") ?? "").trim() || null;
   const timeline = String(formData.get("timeline") ?? "").trim() || null;
-  const workOther = String(formData.get("work_other") ?? "").trim() || null;
-  const workTypeIds = formData.getAll("work_types").map(String);
-  const includeOther = formData.get("work_types_other") === "on";
+  const formatOther = String(formData.get("format_other") ?? "").trim() || null;
+  const formatIds = formData.getAll("formats").map(String);
+  const includeOther = formData.get("formats_other") === "on";
 
   if (!name || !email || !message) {
     return {
@@ -34,9 +34,7 @@ export async function submitInquiry(
     return { status: "error", error: "이메일 형식을 확인해주세요." };
   }
 
-  const workTypes = includeOther
-    ? [...workTypeIds, OTHER_MARKER]
-    : workTypeIds;
+  const formats = includeOther ? [...formatIds, OTHER_MARKER] : formatIds;
 
   const supabase = createServiceRoleClient();
 
@@ -45,8 +43,8 @@ export async function submitInquiry(
     email,
     company,
     message,
-    work_types: workTypes,
-    work_other: includeOther ? workOther : null,
+    formats,
+    work_other: includeOther ? formatOther : null,
     budget_range: budgetRange,
     timeline,
   });
@@ -55,22 +53,22 @@ export async function submitInquiry(
     return { status: "error", error: "문의 저장에 실패했습니다. 잠시 후 다시 시도해주세요." };
   }
 
-  let workTypeNames: string[] = [];
-  if (workTypeIds.length > 0) {
+  let formatNames: string[] = [];
+  if (formatIds.length > 0) {
     const { data: tagRows } = await supabase
       .from("tags")
       .select("name")
-      .in("id", workTypeIds);
-    workTypeNames = tagRows?.map((t) => t.name) ?? [];
+      .in("id", formatIds);
+    formatNames = tagRows?.map((t) => t.name) ?? [];
   }
-  if (includeOther) workTypeNames.push("기타");
+  if (includeOther) formatNames.push("기타");
 
   await sendInquiryNotification({
     name,
     email,
     company,
-    workTypeNames,
-    workOther: includeOther ? workOther : null,
+    formatNames,
+    formatOther: includeOther ? formatOther : null,
     budgetRange,
     timeline,
     message,

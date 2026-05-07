@@ -445,7 +445,7 @@ z-index: 40
 
 - 본문 폰트 최소 16px 유지 (iOS 자동 zoom 방지)
 - 헤더는 모바일에서 **로고만 표시** (16px). 4개 메뉴는 §5.8의 하단 플로팅 pill로 분리 — 헤더 우측 공간 정리.
-- §5.3 필터 칩(industry / work type)은 모바일에서 disclosure 패턴으로 접힘. 닫힌 상태는 stroke 토글(선택 0개=라벨 / 1개 이상=선택 태그명만 truncate). md+에서는 inline 노출 그대로.
+- §5.3 필터 칩(field / format)은 모바일에서 disclosure 패턴으로 접힘. 닫힌 상태는 stroke 토글(선택 0개=라벨 / 1개 이상=선택 태그명만 truncate). md+에서는 inline 노출 그대로.
 - 좌우 패딩: 모바일 16px / 데스크톱 32px
 - 작품 상세 풀블리드 이미지는 모바일에서도 진짜 풀블리드 (좌우 패딩 0)
 - `<body>`에 `pb-24 md:pb-0`로 하단 플로팅 pill이 콘텐츠/푸터를 가리지 않게 한다.

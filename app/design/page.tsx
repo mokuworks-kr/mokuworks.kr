@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "mokuworks의 그래픽 디자인 외주 작업물 카탈로그.",
 };
 
-type SearchParams = { q?: string; type?: string; industry?: string };
+type SearchParams = { q?: string; format?: string; field?: string };
 
 export default async function DesignIndexPage({
   searchParams,
@@ -33,8 +33,8 @@ export default async function DesignIndexPage({
       designs={designs ?? []}
       tags={tags ?? []}
       initialQ={sp.q?.trim() ?? ""}
-      initialTypes={(sp.type ?? "").split(",").filter(Boolean)}
-      initialIndustries={(sp.industry ?? "").split(",").filter(Boolean)}
+      initialFormats={(sp.format ?? "").split(",").filter(Boolean)}
+      initialFields={(sp.field ?? "").split(",").filter(Boolean)}
     />
   );
 }

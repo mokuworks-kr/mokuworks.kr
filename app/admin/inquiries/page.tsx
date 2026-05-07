@@ -46,12 +46,12 @@ export default async function AdminInquiriesPage({
     );
   }
 
-  const [{ data: inquiries }, { data: typeTags }] = await Promise.all([
+  const [{ data: inquiries }, { data: formatTags }] = await Promise.all([
     query,
-    supabase.from("tags").select("id, name").eq("category", "type"),
+    supabase.from("tags").select("id, name").eq("category", "format"),
   ]);
 
-  const tagMap = new Map((typeTags ?? []).map((t) => [t.id, t.name]));
+  const tagMap = new Map((formatTags ?? []).map((t) => [t.id, t.name]));
 
   return (
     <section className="mx-auto max-w-page px-4 md:px-8 py-16">
@@ -105,7 +105,7 @@ export default async function AdminInquiriesPage({
           </li>
         )}
         {inquiries?.map((iq) => {
-          const workNames = (iq.work_types ?? []).map((t) =>
+          const formatNames = (iq.formats ?? []).map((t) =>
             t === "other" ? "기타" : (tagMap.get(t) ?? "—"),
           );
           return (
@@ -125,7 +125,9 @@ export default async function AdminInquiriesPage({
                     ) : null}
                   </p>
                   <p className="text-small text-stone truncate">
-                    {workNames.length > 0 ? workNames.join(", ") : "작업 미선택"}
+                    {formatNames.length > 0
+                      ? formatNames.join(", ")
+                      : "포맷 미선택"}
                     {iq.budget_range ? ` · ${iq.budget_range}` : ""}
                     {iq.timeline ? ` · ${iq.timeline}` : ""}
                   </p>

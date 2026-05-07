@@ -22,15 +22,15 @@ export function TagsManager({ initialTags }: { initialTags: Tag[] }) {
         </p>
       )}
       <CategorySection
-        label="Work Type"
-        category="type"
-        tags={initialTags.filter((t) => t.category === "type")}
+        label="Format"
+        category="format"
+        tags={initialTags.filter((t) => t.category === "format")}
         onError={setError}
       />
       <CategorySection
-        label="Industry"
-        category="industry"
-        tags={initialTags.filter((t) => t.category === "industry")}
+        label="Field"
+        category="field"
+        tags={initialTags.filter((t) => t.category === "field")}
         onError={setError}
       />
     </div>
@@ -44,7 +44,7 @@ function CategorySection({
   onError,
 }: {
   label: string;
-  category: "type" | "industry";
+  category: "format" | "field";
   tags: Tag[];
   onError: (msg: string | null) => void;
 }) {

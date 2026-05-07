@@ -33,7 +33,7 @@ export default async function EditDesignPage({
   const tagOptions: TagOption[] = (tags ?? []).map((t) => ({
     id: t.id,
     name: t.name,
-    category: t.category as "type" | "industry",
+    category: t.category as "format" | "field",
   }));
 
   return (

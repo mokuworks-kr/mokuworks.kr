@@ -26,7 +26,7 @@ export type DesignInitial = {
 export type TagOption = {
   id: string;
   name: string;
-  category: "type" | "industry";
+  category: "format" | "field";
 };
 
 const inputCls =
@@ -118,8 +118,8 @@ export function DesignForm({
     });
   }
 
-  const industryTags = tags.filter((t) => t.category === "industry");
-  const typeTags = tags.filter((t) => t.category === "type");
+  const fieldTags = tags.filter((t) => t.category === "field");
+  const formatTags = tags.filter((t) => t.category === "format");
 
   return (
     <form action={onSubmit} className="flex flex-col gap-6">
@@ -180,14 +180,14 @@ export function DesignForm({
       <fieldset className="flex flex-col gap-4">
         <legend className={labelCls}>태그</legend>
         <TagGroup
-          label="Industry"
-          tags={industryTags}
+          label="Field"
+          tags={fieldTags}
           selected={selectedTagIds}
           onToggle={toggleTag}
         />
         <TagGroup
-          label="Work Type"
-          tags={typeTags}
+          label="Format"
+          tags={formatTags}
           selected={selectedTagIds}
           onToggle={toggleTag}
         />

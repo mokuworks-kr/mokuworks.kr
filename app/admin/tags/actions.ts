@@ -8,11 +8,11 @@ type Result = { ok: true } | { error: string };
 
 export async function createTag(
   name: string,
-  category: "type" | "industry",
+  category: "format" | "field",
 ): Promise<Result> {
   const trimmed = name.trim();
   if (!trimmed) return { error: "이름을 입력해주세요." };
-  if (!["type", "industry"].includes(category)) {
+  if (!["format", "field"].includes(category)) {
     return { error: "카테고리가 올바르지 않습니다." };
   }
 

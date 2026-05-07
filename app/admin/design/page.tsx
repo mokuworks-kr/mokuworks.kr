@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-type SearchParams = { q?: string; type?: string; industry?: string };
+type SearchParams = { q?: string; format?: string; field?: string };
 
 export default async function AdminDesignPage({
   searchParams,
@@ -46,8 +46,8 @@ export default async function AdminDesignPage({
         designs={designs ?? []}
         tags={tags ?? []}
         initialQ={sp.q?.trim() ?? ""}
-        initialTypes={(sp.type ?? "").split(",").filter(Boolean)}
-        initialIndustries={(sp.industry ?? "").split(",").filter(Boolean)}
+        initialFormats={(sp.format ?? "").split(",").filter(Boolean)}
+        initialFields={(sp.field ?? "").split(",").filter(Boolean)}
       />
     </section>
   );

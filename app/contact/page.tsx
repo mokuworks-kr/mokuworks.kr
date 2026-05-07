@@ -13,10 +13,10 @@ const ADMIN_EMAIL = "mokuworks.kr@gmail.com";
 
 export default async function ContactPage() {
   const supabase = await createClient();
-  const { data: typeTags } = await supabase
+  const { data: formatTags } = await supabase
     .from("tags")
     .select("id, name")
-    .eq("category", "type")
+    .eq("category", "format")
     .order("name");
 
   return (
@@ -43,7 +43,7 @@ export default async function ContactPage() {
         </div>
 
         <div className="mt-12 lg:mt-0 lg:col-span-2">
-          <ContactForm typeTags={typeTags ?? []} />
+          <ContactForm formatTags={formatTags ?? []} />
         </div>
       </div>
     </section>

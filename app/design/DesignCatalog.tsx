@@ -22,42 +22,41 @@ type Props = {
   designs: DesignItem[];
   tags: TagItem[];
   initialQ: string;
-  initialTypes: string[];
-  initialIndustries: string[];
+  initialFormats: string[];
+  initialFields: string[];
 };
 
 export function DesignCatalog({
   designs,
   tags,
   initialQ,
-  initialTypes,
-  initialIndustries,
+  initialFormats,
+  initialFields,
 }: Props) {
   const [q, setQ] = useState(initialQ);
-  const [typeFilters, setTypeFilters] = useState<Set<string>>(
-    () => new Set(initialTypes),
+  const [formatFilters, setFormatFilters] = useState<Set<string>>(
+    () => new Set(initialFormats),
   );
-  const [industryFilters, setIndustryFilters] = useState<Set<string>>(
-    () => new Set(initialIndustries),
+  const [fieldFilters, setFieldFilters] = useState<Set<string>>(
+    () => new Set(initialFields),
   );
 
   useEffect(() => {
     const sp = new URLSearchParams();
     if (q.trim()) sp.set("q", q.trim());
-    if (industryFilters.size > 0)
-      sp.set("industry", [...industryFilters].join(","));
-    if (typeFilters.size > 0) sp.set("type", [...typeFilters].join(","));
+    if (fieldFilters.size > 0) sp.set("field", [...fieldFilters].join(","));
+    if (formatFilters.size > 0) sp.set("format", [...formatFilters].join(","));
     const qs = sp.toString();
     const url = qs ? `/design?${qs}` : "/design";
     window.history.replaceState({}, "", url);
-  }, [q, typeFilters, industryFilters]);
+  }, [q, formatFilters, fieldFilters]);
 
-  const industries = useMemo(
-    () => tags.filter((t) => t.category === "industry"),
+  const fields = useMemo(
+    () => tags.filter((t) => t.category === "field"),
     [tags],
   );
-  const types = useMemo(
-    () => tags.filter((t) => t.category === "type"),
+  const formats = useMemo(
+    () => tags.filter((t) => t.category === "format"),
     [tags],
   );
 
@@ -70,15 +69,18 @@ export function DesignCatalog({
       }
       const ds = new Set(d.tags);
       if (
-        industryFilters.size > 0 &&
-        ![...industryFilters].some((id) => ds.has(id))
+        fieldFilters.size > 0 &&
+        ![...fieldFilters].some((id) => ds.has(id))
       )
         return false;
-      if (typeFilters.size > 0 && ![...typeFilters].some((id) => ds.has(id)))
+      if (
+        formatFilters.size > 0 &&
+        ![...formatFilters].some((id) => ds.has(id))
+      )
         return false;
       return true;
     });
-  }, [designs, q, typeFilters, industryFilters]);
+  }, [designs, q, formatFilters, fieldFilters]);
 
   function toggle(set: Set<string>, id: string): Set<string> {
     const next = new Set(set);
@@ -101,18 +103,18 @@ export function DesignCatalog({
 
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
         <ChipBar
-          label="Industry"
-          tags={industries}
-          selected={industryFilters}
-          onClear={() => setIndustryFilters(new Set())}
-          onToggle={(id) => setIndustryFilters((s) => toggle(s, id))}
+          label="Field"
+          tags={fields}
+          selected={fieldFilters}
+          onClear={() => setFieldFilters(new Set())}
+          onToggle={(id) => setFieldFilters((s) => toggle(s, id))}
         />
         <ChipBar
-          label="Work Type"
-          tags={types}
-          selected={typeFilters}
-          onClear={() => setTypeFilters(new Set())}
-          onToggle={(id) => setTypeFilters((s) => toggle(s, id))}
+          label="Format"
+          tags={formats}
+          selected={formatFilters}
+          onClear={() => setFormatFilters(new Set())}
+          onToggle={(id) => setFormatFilters((s) => toggle(s, id))}
         />
       </div>
 

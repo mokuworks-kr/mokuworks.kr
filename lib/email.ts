@@ -2,8 +2,8 @@ type InquiryEmail = {
   name: string;
   email: string;
   company?: string | null;
-  workTypeNames: string[];
-  workOther?: string | null;
+  formatNames: string[];
+  formatOther?: string | null;
   budgetRange?: string | null;
   timeline?: string | null;
   message: string;
@@ -26,9 +26,9 @@ export async function sendInquiryNotification(payload: InquiryEmail) {
     `<p><strong>이메일:</strong> ${escapeHtml(payload.email)}</p>`,
     payload.company &&
       `<p><strong>회사/소속:</strong> ${escapeHtml(payload.company)}</p>`,
-    `<p><strong>작업 종류:</strong> ${payload.workTypeNames.map(escapeHtml).join(", ") || "—"}</p>`,
-    payload.workOther &&
-      `<p><strong>기타 작업:</strong> ${escapeHtml(payload.workOther)}</p>`,
+    `<p><strong>포맷:</strong> ${payload.formatNames.map(escapeHtml).join(", ") || "—"}</p>`,
+    payload.formatOther &&
+      `<p><strong>기타 포맷:</strong> ${escapeHtml(payload.formatOther)}</p>`,
     payload.budgetRange &&
       `<p><strong>예산:</strong> ${escapeHtml(payload.budgetRange)}</p>`,
     payload.timeline &&

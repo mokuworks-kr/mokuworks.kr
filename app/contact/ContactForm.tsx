@@ -18,9 +18,9 @@ const inputCls =
   "bg-cloud text-ink rounded-sm px-4 py-3 text-body placeholder:text-fog focus:outline-none focus:ring-1 focus:ring-ink";
 const labelCls = "text-small text-stone";
 
-type TypeTag = { id: string; name: string };
+type FormatTag = { id: string; name: string };
 
-export function ContactForm({ typeTags }: { typeTags: TypeTag[] }) {
+export function ContactForm({ formatTags }: { formatTags: FormatTag[] }) {
   const [state, formAction, pending] = useActionState<InquiryState, FormData>(
     submitInquiry,
     { status: "idle" },
@@ -54,13 +54,13 @@ export function ContactForm({ typeTags }: { typeTags: TypeTag[] }) {
       <fieldset className="flex flex-col gap-3">
         <legend className={labelCls}>어떤 작업을 원하시나요?</legend>
         <div className="flex flex-wrap gap-2">
-          {typeTags.map((tag) => (
-            <Chip key={tag.id} name="work_types" value={tag.id}>
+          {formatTags.map((tag) => (
+            <Chip key={tag.id} name="formats" value={tag.id}>
               {tag.name}
             </Chip>
           ))}
           <Chip
-            name="work_types_other"
+            name="formats_other"
             value="on"
             onChange={(e) => setOtherChecked(e.currentTarget.checked)}
           >
@@ -70,7 +70,7 @@ export function ContactForm({ typeTags }: { typeTags: TypeTag[] }) {
         {otherChecked && (
           <input
             type="text"
-            name="work_other"
+            name="format_other"
             placeholder="자세히 적어주세요"
             className={`${inputCls} mt-1`}
           />
