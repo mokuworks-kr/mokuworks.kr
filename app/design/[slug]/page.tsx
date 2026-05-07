@@ -84,9 +84,12 @@ export default async function DesignDetailPage({
         </header>
 
         {images.length > 0 && (
-          <div className="mt-12 lg:mt-0 lg:col-span-2 flex flex-col gap-2">
+          <div className="mt-12 lg:mt-0 lg:col-span-2 flex flex-col gap-6">
             {images.map((url) => (
-              <div key={url} className="relative w-full bg-cloud">
+              <div
+                key={url}
+                className="relative w-full bg-cloud overflow-hidden rounded-sm"
+              >
                 <Image
                   src={url}
                   alt=""

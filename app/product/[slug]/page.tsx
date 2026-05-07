@@ -75,15 +75,17 @@ export default async function ProductPage({
       </header>
 
       {product.image_url && (
-        <div className="relative w-full bg-cloud">
-          <Image
-            src={product.image_url}
-            alt={product.name}
-            width={2000}
-            height={2000}
-            sizes="100vw"
-            className="w-full h-auto"
-          />
+        <div className="px-4 md:px-8">
+          <div className="relative w-full bg-cloud overflow-hidden rounded-sm">
+            <Image
+              src={product.image_url}
+              alt={product.name}
+              width={2000}
+              height={2000}
+              sizes="100vw"
+              className="w-full h-auto"
+            />
+          </div>
         </div>
       )}
 

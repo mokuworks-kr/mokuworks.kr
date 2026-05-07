@@ -371,8 +371,9 @@ thumb: 20 × 20px, bg-paper, 작은 그림자
   description (있을 때): 16px, --color-ink, leading 1.75, 메타와 32px 간격, 본문 max-width 660px
 
 이미지 영역 (메타 아래):
-  화면 폭 풀블리드 (좌우 패딩 무시)
-  이미지 사이 간격: 0 또는 1px --color-mist (시각 디자인 시점에 결정)
+  컨테이너(`max-w-page`) + 페이지 좌우 패딩 안에서 폭 100% — 인덱스 카드와 동일한 좌우 정렬선
+  이미지 사이 간격: 24px (`--gap-card-grid`) — 인덱스 카드 그리드 gap과 동일해 페이지 간 박자 일치
+  이미지 wrapper: `bg-cloud overflow-hidden rounded-sm` — 인덱스 카드 썸네일과 동일한 §4 Filled tier radius
   이미지 자체는 width 100%, height auto
 
 페이지 하단:
