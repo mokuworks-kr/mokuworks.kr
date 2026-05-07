@@ -81,18 +81,18 @@ export default async function AdminInquiriesPage({
         })}
       </nav>
 
-      <form className="mt-6 flex gap-2" action="/admin/inquiries">
+      <form className="mt-8 flex items-center gap-4" action="/admin/inquiries">
         {status && <input type="hidden" name="status" value={status} />}
         <input
           type="text"
           name="q"
           defaultValue={q}
           placeholder="이름·회사·메시지 검색"
-          className="flex-1 bg-cloud text-ink rounded-sm px-4 py-2 text-body placeholder:text-fog focus:outline-none focus:ring-1 focus:ring-ink"
+          className="flex-1 bg-transparent text-ink border-b border-mist py-3 text-body placeholder:text-fog focus:outline-none focus:border-ink transition-colors"
         />
         <button
           type="submit"
-          className="text-small text-stone hover:text-ink transition-colors duration-150 px-2"
+          className="text-small text-stone hover:text-ink transition-colors duration-150"
         >
           검색
         </button>

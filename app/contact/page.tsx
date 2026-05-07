@@ -22,7 +22,7 @@ export default async function ContactPage() {
   return (
     <section className="mx-auto max-w-page px-4 md:px-8 py-24 md:py-32">
       <div className="lg:grid lg:grid-cols-3 lg:gap-12">
-        <div className="lg:sticky lg:top-8 lg:self-start">
+        <div className="lg:sticky lg:top-48 lg:self-start">
           <h1 className="text-heading font-semibold text-ink leading-tight">
             프로젝트 의뢰하기
           </h1>

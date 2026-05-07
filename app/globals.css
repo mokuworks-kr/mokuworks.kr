@@ -56,7 +56,7 @@
   --radius-pill: 9999px;
 
   /* Page container — single max-width applied to main content area (Header/Footer are full-bleed) */
-  --container-page: 1760px;
+  --container-page: 1920px;
 }
 
 /* Semantic spacing — used as CSS vars (not utility classes) */
