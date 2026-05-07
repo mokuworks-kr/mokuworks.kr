@@ -29,10 +29,16 @@ export function CopyEmail({ email }: { email: string }) {
         type="button"
         onClick={handleClick}
         aria-label={copied ? "주소를 복사했습니다" : "주소 복사하기"}
-        className="mt-2 inline-flex items-center gap-2 text-body text-ink hover:opacity-60 transition-opacity duration-150"
+        className="group mt-2 inline-flex items-center gap-2 text-body text-ink hover:opacity-60 transition-opacity duration-150"
       >
         <span>{email}</span>
-        {copied ? <CheckIcon /> : <CopyIcon />}
+        {copied ? (
+          <CheckIcon />
+        ) : (
+          <span className="opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100">
+            <CopyIcon />
+          </span>
+        )}
       </button>
       <p className="mt-1 text-caption text-stone min-h-[1em]" aria-live="polite">
         {copied ? "주소를 복사했습니다" : ""}
