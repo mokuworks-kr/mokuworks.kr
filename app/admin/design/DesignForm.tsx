@@ -122,7 +122,7 @@ export function DesignForm({
   const formatTags = tags.filter((t) => t.category === "format");
 
   return (
-    <form action={onSubmit} className="flex flex-col gap-6">
+    <form action={onSubmit} className="flex flex-col gap-6 max-w-form">
       <Field label="제목" required>
         <input
           type="text"
@@ -156,14 +156,12 @@ export function DesignForm({
         />
       </Field>
 
-      <Field label="작업 시기 (YYYY-MM)" required>
+      <Field label="작업 시기" required>
         <input
-          type="text"
+          type="month"
           name="date"
           required
-          pattern="\d{4}-\d{2}"
           defaultValue={initial?.date}
-          placeholder="2026-02"
           className={inputCls}
         />
       </Field>
@@ -216,7 +214,7 @@ export function DesignForm({
       <button
         type="submit"
         disabled={pending}
-        className="bg-ink text-paper rounded-sm px-8 py-4 text-body font-medium hover:opacity-85 transition-opacity duration-150 disabled:opacity-50 self-start"
+        className="bg-ink text-paper rounded-sm px-8 py-4 text-body font-medium hover:opacity-85 transition-opacity duration-150 disabled:opacity-50 self-end"
       >
         {pending ? "저장 중..." : "저장"}
       </button>

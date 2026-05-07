@@ -99,7 +99,7 @@ export function ProductForm({ initial }: { initial?: ProductInitial }) {
         : null;
 
   return (
-    <form action={onSubmit} className="flex flex-col gap-6">
+    <form action={onSubmit} className="flex flex-col gap-6 max-w-form">
       <Field label="제품명" required>
         <input
           type="text"
@@ -172,13 +172,11 @@ export function ProductForm({ initial }: { initial?: ProductInitial }) {
         />
       </Field>
 
-      <Field label="출시일 (YYYY-MM, 옵션)">
+      <Field label="출시일 (옵션)">
         <input
-          type="text"
+          type="month"
           name="launch_date"
-          pattern="\d{4}-\d{2}"
           defaultValue={initial?.launch_date ?? ""}
-          placeholder="2026-05"
           className={inputCls}
         />
       </Field>
@@ -201,7 +199,7 @@ export function ProductForm({ initial }: { initial?: ProductInitial }) {
       <button
         type="submit"
         disabled={pending}
-        className="bg-ink text-paper rounded-sm px-8 py-4 text-body font-medium hover:opacity-85 transition-opacity duration-150 disabled:opacity-50 self-start"
+        className="bg-ink text-paper rounded-sm px-8 py-4 text-body font-medium hover:opacity-85 transition-opacity duration-150 disabled:opacity-50 self-end"
       >
         {pending ? "저장 중..." : "저장"}
       </button>

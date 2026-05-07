@@ -57,6 +57,8 @@
 
   /* Page container — single max-width applied to main content area (Header/Footer are full-bleed) */
   --container-page: 1920px;
+  /* Form container — admin forms / detail rows are constrained to sm breakpoint (640px) so inputs stay at a comfortable typing/scanning width on FHD admin sessions. */
+  --container-form: 640px;
 }
 
 /* Semantic spacing — used as CSS vars (not utility classes) */

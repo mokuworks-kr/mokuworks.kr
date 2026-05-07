@@ -50,11 +50,11 @@ export default async function InquiryDetailPage({
         back={{ href: "/admin/inquiries", label: "← 목록" }}
       />
 
-      <div className="mt-8">
+      <div className="mt-8 max-w-form">
         <StatusActions id={inquiry.id} current={inquiry.status as Status} />
       </div>
 
-      <dl className="mt-12 flex flex-col gap-6">
+      <dl className="mt-12 flex flex-col gap-6 max-w-form">
         <Row label="이름">{inquiry.name}</Row>
         <Row label="이메일">
           <a
@@ -81,7 +81,7 @@ export default async function InquiryDetailPage({
         </Row>
       </dl>
 
-      <div className="mt-12">
+      <div className="mt-12 max-w-form flex justify-end">
         <a
           href={`mailto:${inquiry.email}?subject=${mailtoSubject}`}
           className="inline-block bg-ink text-paper rounded-sm px-8 py-4 text-body font-medium hover:opacity-85 transition-opacity duration-150"
