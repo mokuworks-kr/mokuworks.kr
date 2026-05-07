@@ -92,3 +92,38 @@ body {
   background: var(--color-ink);
   color: var(--color-paper);
 }
+
+/*
+ * Design 카드 그리드 — pentagram 스타일 변주.
+ * 1col(<sm) 균일 / 2col(sm~lg) 5n+1 큼직(2x2, 한 행 통째)
+ * 3col(lg+) 10 카드 사이클: 5는 BIG 왼쪽 + 5는 BIG 오른쪽, 빈 자리는 BIG 옆 아래쪽.
+ * 3col 배치는 li의 inline style(--lg-col / --lg-row)로 명시.
+ */
+.design-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap-card-grid);
+}
+
+@media (min-width: 640px) {
+  .design-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023.98px) {
+  .design-grid > li:nth-child(5n + 1) {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .design-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .design-grid > li {
+    grid-column: var(--lg-col, auto);
+    grid-row: var(--lg-row, auto);
+  }
+}

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { ChipPanel, ChipTrigger } from "@/components/ChipBar";
@@ -17,6 +18,30 @@ export type DesignItem = {
 };
 
 export type TagItem = { id: string; name: string; category: string };
+
+function lgPlacement(i: number): CSSProperties {
+  const cycle = Math.floor(i / 5);
+  const pos = i % 5;
+  const isRight = cycle % 2 === 1;
+  const rowBase = cycle * 3 + 1;
+
+  if (pos === 0) {
+    return {
+      "--lg-col": isRight ? "2 / span 2" : "1 / span 2",
+      "--lg-row": `${rowBase} / span 2`,
+    } as CSSProperties;
+  }
+  if (pos === 1) {
+    return {
+      "--lg-col": isRight ? "1" : "3",
+      "--lg-row": `${rowBase}`,
+    } as CSSProperties;
+  }
+  return {
+    "--lg-col": `${pos - 1}`,
+    "--lg-row": `${rowBase + 2}`,
+  } as CSSProperties;
+}
 
 type Props = {
   designs: DesignItem[];
@@ -211,9 +236,9 @@ export function DesignCatalog({
           조건에 맞는 작업이 없어요.
         </p>
       ) : (
-        <ul className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filtered.map((d) => (
-            <li key={d.id}>
+        <ul className="design-grid mt-10">
+          {filtered.map((d, i) => (
+            <li key={d.id} style={lgPlacement(i)}>
               <Link href={`/design/${d.slug}`} className="group block">
                 <div className="relative aspect-[4/3] bg-cloud overflow-hidden rounded-sm">
                   {d.image_url && (
@@ -221,7 +246,7 @@ export function DesignCatalog({
                       src={d.image_url}
                       alt={d.title}
                       fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 67vw"
                       className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                   )}
