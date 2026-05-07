@@ -23,10 +23,10 @@ export function Header() {
             width={228}
             height={32}
             priority
-            className="h-4 md:h-5 w-auto"
+            className="h-5 md:h-5 w-auto"
           />
         </Link>
-        <nav>
+        <nav className="hidden md:block">
           <ul className="flex items-center gap-4 md:gap-6 text-sm md:text-body text-ink">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>

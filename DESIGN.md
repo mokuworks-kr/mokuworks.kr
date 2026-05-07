@@ -322,11 +322,12 @@ border-radius: 9999px (완전 둥근)
 높이: 64px
 배경: --color-paper (스크롤 시에도 동일)
 좌측: mokuworks 로고 이미지 (`public/logo.svg`)
-  - 높이: 모바일 28px, 데스크톱 32px (width 비율 자동)
+  - 높이: 20px (모바일/데스크톱 동일, width 비율 자동)
   - 호버: opacity 0.6
-우측: Design / Products / About / Contact (16px, weight 400, --color-ink)
+우측 (md 이상만): Design / Products / About / Contact (16px, weight 400, --color-ink)
   - 호버: opacity 0.6
   - 현재 페이지: opacity 0.6 (활성 표시는 약하게)
+  - **모바일(< md)에서는 메뉴를 노출하지 않음** — §5.8 모바일 하단 플로팅 네비게이션으로 대체.
 보더 하단: 없음 (또는 1px --color-mist, 시각 디자인 시점 결정)
 ```
 
@@ -342,6 +343,34 @@ border-radius: 9999px (완전 둥근)
   - 저작권 표기 (--color-fog, 12px)
 모든 링크: --color-ink, weight 400, 호버 opacity 0.6
 ```
+
+### 5.8 모바일 하단 플로팅 네비게이션
+
+모바일(< md)에서만 노출되는 floating pill로, 헤더에서 빠진 메뉴 4개를 담는다. 데스크톱에서는 표시되지 않음(`md:hidden`).
+
+```
+표시 조건: viewport < 768px (md 미만)
+위치: position: fixed; bottom: 24px; 좌우 가운데 정렬
+폭: calc(100vw - 32px)  — 좌우 16px gutter, 모바일 페이지 패딩과 맞춤
+배경: --color-paper
+보더: 1px --color-mist
+border-radius: 8px (--radius-md)
+패딩: 12px 16px
+z-index: 40
+콘텐츠: Design / Products / About / Contact
+  - 가로 균등 배치 (justify-around)
+  - 16px / weight 400 / --color-ink
+  - 호버: opacity 0.6
+  - 현재 페이지: opacity 0.6 (헤더 메뉴와 동일한 약한 활성 표시)
+```
+
+레이아웃 보정:
+- `<body>`에 `pb-24 md:pb-0` (모바일 96px 하단 패딩) 적용해 푸터·콘텐츠가 pill에 가려지지 않게 한다.
+- pill 자체에는 그림자·블러 사용 안 함 — 1px hairline border만으로 분리 (브랜드 톤).
+
+원칙:
+- 사이트 전역 검색이 없으므로 minimalissimo와 달리 검색 입력은 두지 않는다. 메뉴 4개만 단순 가로 배치.
+- 햄버거 + 풀스크린 오버레이 패턴은 사용하지 않는다 — 메뉴 항목 수가 적어 항상 노출이 더 직관적.
 
 ---
 
@@ -392,9 +421,10 @@ border-radius: 9999px (완전 둥근)
 ### 모바일 우선 고려사항
 
 - 본문 폰트 최소 16px 유지 (iOS 자동 zoom 방지)
-- 헤더 네비게이션은 모바일에서 햄버거가 아니라 **그대로 가로 나열** (메뉴 4개라 충분히 들어감). 텍스트 크기만 살짝 줄임.
+- 헤더는 모바일에서 **로고만 표시**. 4개 메뉴는 §5.8의 하단 플로팅 pill로 분리 — 헤더 우측 공간 정리, 로고는 데스크톱과 동일한 20px 유지.
 - 좌우 패딩: 모바일 16px / 데스크톱 32px
 - 작품 상세 풀블리드 이미지는 모바일에서도 진짜 풀블리드 (좌우 패딩 0)
+- `<body>`에 `pb-24 md:pb-0`로 하단 플로팅 pill이 콘텐츠/푸터를 가리지 않게 한다.
 
 ---
 

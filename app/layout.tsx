@@ -5,6 +5,7 @@ import "./globals.css";
 
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 
 const astaSans = Asta_Sans({
   subsets: ["latin"],
@@ -43,10 +44,11 @@ export default function RootLayout({
       lang="ko"
       className={`${astaSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col pb-24 md:pb-0">
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        <MobileBottomNav />
       </body>
     </html>
   );
