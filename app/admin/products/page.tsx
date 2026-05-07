@@ -21,7 +21,7 @@ export default async function AdminProductsPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <section className="mx-auto max-w-page px-4 md:px-8 py-16">
+    <section className="mx-auto max-w-form px-4 md:px-8 py-16">
       <PageHeader title="제품 관리">
         <Link
           href="/admin/products/new"

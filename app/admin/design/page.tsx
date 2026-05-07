@@ -32,7 +32,7 @@ export default async function AdminDesignPage({
   ]);
 
   return (
-    <section className="mx-auto max-w-page px-4 md:px-8 py-16">
+    <section className="mx-auto max-w-form px-4 md:px-8 py-16">
       <PageHeader title="디자인 작업 관리">
         <Link
           href="/admin/design/new"

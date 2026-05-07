@@ -44,17 +44,17 @@ export default async function InquiryDetailPage({
   );
 
   return (
-    <section className="mx-auto max-w-page px-4 md:px-8 py-16">
+    <section className="mx-auto max-w-form px-4 md:px-8 py-16">
       <PageHeader
         title="문의 상세"
         back={{ href: "/admin/inquiries", label: "← 목록" }}
       />
 
-      <div className="mt-8 max-w-form">
+      <div className="mt-8">
         <StatusActions id={inquiry.id} current={inquiry.status as Status} />
       </div>
 
-      <dl className="mt-12 flex flex-col gap-6 max-w-form">
+      <dl className="mt-12 flex flex-col gap-6">
         <Row label="이름">{inquiry.name}</Row>
         <Row label="이메일">
           <a
@@ -81,7 +81,7 @@ export default async function InquiryDetailPage({
         </Row>
       </dl>
 
-      <div className="mt-12 max-w-form flex justify-end">
+      <div className="mt-12 flex justify-end">
         <a
           href={`mailto:${inquiry.email}?subject=${mailtoSubject}`}
           className="inline-block bg-ink text-paper rounded-sm px-8 py-4 text-body font-medium hover:opacity-85 transition-opacity duration-150"

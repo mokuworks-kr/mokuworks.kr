@@ -54,7 +54,7 @@ export default async function AdminInquiriesPage({
   const tagMap = new Map((formatTags ?? []).map((t) => [t.id, t.name]));
 
   return (
-    <section className="mx-auto max-w-page px-4 md:px-8 py-16">
+    <section className="mx-auto max-w-form px-4 md:px-8 py-16">
       <PageHeader title="문의 인박스" />
 
       <nav className="mt-8 flex flex-wrap gap-4 text-small">

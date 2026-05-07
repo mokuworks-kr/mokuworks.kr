@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useEffect, useRef, useState, useTransition } from "react";
 
+import { MonthPicker } from "@/components/MonthPicker";
+import { Toggle } from "@/components/Toggle";
 import { createClient } from "@/lib/supabase/client";
 import { sanitizeFilename } from "@/lib/supabase/storage";
 
@@ -99,7 +101,7 @@ export function ProductForm({ initial }: { initial?: ProductInitial }) {
         : null;
 
   return (
-    <form action={onSubmit} className="flex flex-col gap-6 max-w-form">
+    <form action={onSubmit} className="flex flex-col gap-6">
       <Field label="제품명" required>
         <input
           type="text"
@@ -173,22 +175,17 @@ export function ProductForm({ initial }: { initial?: ProductInitial }) {
       </Field>
 
       <Field label="출시일 (옵션)">
-        <input
-          type="month"
+        <MonthPicker
           name="launch_date"
           defaultValue={initial?.launch_date ?? ""}
-          className={inputCls}
         />
       </Field>
 
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          name="published"
-          defaultChecked={initial?.published ?? false}
-        />
-        <span className="text-body text-ink">공개</span>
-      </label>
+      <Toggle
+        name="published"
+        label="공개"
+        defaultChecked={initial?.published ?? false}
+      />
 
       {error && (
         <p className="text-small text-ink" role="alert">

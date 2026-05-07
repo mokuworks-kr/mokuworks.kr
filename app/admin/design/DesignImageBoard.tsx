@@ -113,7 +113,7 @@ export function DesignImageBoard({ items, setItems }: Props) {
           const fs = e.dataTransfer.files;
           if (fs && fs.length > 0) addFiles(fs);
         }}
-        className={`flex flex-col items-center gap-1 border-2 border-dashed rounded-sm px-6 py-10 cursor-pointer transition-colors duration-150 ${
+        className={`flex flex-col items-center justify-center gap-1 border-2 border-dashed rounded-sm px-6 min-h-[180px] cursor-pointer transition-colors duration-150 ${
           dropOver
             ? "border-ink bg-canvas"
             : "border-mist hover:border-stone bg-transparent"

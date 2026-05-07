@@ -25,7 +25,7 @@ export default async function NewDesignPage() {
   }));
 
   return (
-    <section className="mx-auto max-w-page px-4 md:px-8 py-16">
+    <section className="mx-auto max-w-form px-4 md:px-8 py-16">
       <PageHeader
         title="새 작업"
         back={{ href: "/admin/design", label: "← 목록" }}

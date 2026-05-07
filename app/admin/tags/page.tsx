@@ -32,7 +32,7 @@ export default async function AdminTagsPage() {
   }));
 
   return (
-    <section className="mx-auto max-w-page px-4 md:px-8 py-16">
+    <section className="mx-auto max-w-form px-4 md:px-8 py-16">
       <PageHeader title="태그 관리" />
       <p className="mt-2 text-small text-stone">
         Format / Field 태그를 관리하세요. 사용 중인 태그도 강제 삭제 가능 —

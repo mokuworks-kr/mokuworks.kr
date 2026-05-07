@@ -15,7 +15,7 @@ export function TagsManager({ initialTags }: { initialTags: Tag[] }) {
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <div className="flex flex-col gap-12 max-w-form">
+    <div className="flex flex-col gap-12">
       {error && (
         <p className="text-small text-ink" role="alert">
           {error}

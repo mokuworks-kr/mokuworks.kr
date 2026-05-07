@@ -2,6 +2,8 @@
 
 import { useState, useTransition } from "react";
 
+import { MonthPicker } from "@/components/MonthPicker";
+import { Toggle } from "@/components/Toggle";
 import { createClient } from "@/lib/supabase/client";
 import { sanitizeFilename } from "@/lib/supabase/storage";
 
@@ -122,7 +124,7 @@ export function DesignForm({
   const formatTags = tags.filter((t) => t.category === "format");
 
   return (
-    <form action={onSubmit} className="flex flex-col gap-6 max-w-form">
+    <form action={onSubmit} className="flex flex-col gap-6">
       <Field label="제목" required>
         <input
           type="text"
@@ -141,7 +143,6 @@ export function DesignForm({
           required
           pattern="[a-z0-9-]+"
           defaultValue={initial?.slug}
-          placeholder="dnotitia-brochure"
           className={inputCls}
         />
       </Field>
@@ -157,13 +158,7 @@ export function DesignForm({
       </Field>
 
       <Field label="작업 시기" required>
-        <input
-          type="month"
-          name="date"
-          required
-          defaultValue={initial?.date}
-          className={inputCls}
-        />
+        <MonthPicker name="date" defaultValue={initial?.date} required />
       </Field>
 
       <Field label="설명">
@@ -196,14 +191,11 @@ export function DesignForm({
         <DesignImageBoard items={items} setItems={setItems} />
       </fieldset>
 
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          name="published"
-          defaultChecked={initial?.published ?? false}
-        />
-        <span className="text-body text-ink">공개</span>
-      </label>
+      <Toggle
+        name="published"
+        label="공개"
+        defaultChecked={initial?.published ?? false}
+      />
 
       {error && (
         <p className="text-small text-ink" role="alert">
