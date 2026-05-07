@@ -30,14 +30,24 @@ export async function generateMetadata({
   const desc = design.description?.trim()
     ? design.description.slice(0, 100)
     : `${design.title} — ${design.client}`;
+  const images = design.image_url
+    ? [{ url: design.image_url, alt: design.title }]
+    : undefined;
 
   return {
     title: design.title,
     description: desc,
+    alternates: { canonical: `/design/${design.slug}` },
     openGraph: {
       title: design.title,
       description: desc,
-      images: design.image_url ? [{ url: design.image_url }] : undefined,
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: design.title,
+      description: desc,
+      images,
     },
   };
 }

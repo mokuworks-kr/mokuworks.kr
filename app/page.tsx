@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  description:
+    "1인 메이커 mokuworks의 그래픽 디자인 작업과 자체 웹앱 제품을 한곳에 모은 사이트.",
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   return (

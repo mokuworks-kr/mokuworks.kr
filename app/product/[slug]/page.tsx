@@ -27,13 +27,24 @@ export async function generateMetadata({
   const product = await getProduct(slug);
   if (!product) return { title: "Not Found" };
 
+  const images = product.image_url
+    ? [{ url: product.image_url, alt: product.name }]
+    : undefined;
+
   return {
     title: product.name,
     description: product.tagline,
+    alternates: { canonical: `/product/${product.slug}` },
     openGraph: {
       title: product.name,
       description: product.tagline,
-      images: product.image_url ? [{ url: product.image_url }] : undefined,
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.name,
+      description: product.tagline,
+      images,
     },
   };
 }
