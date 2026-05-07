@@ -194,7 +194,7 @@ export function DesignForm({
       <Toggle
         name="published"
         label="공개"
-        defaultChecked={initial?.published ?? false}
+        defaultChecked={initial?.published ?? true}
       />
 
       {error && (

@@ -102,7 +102,7 @@ export function AdminDesignCatalog({
         className="mt-8 w-full bg-transparent text-ink border-b border-mist py-3 text-body placeholder:text-fog focus:outline-none focus:border-ink transition-colors"
       />
 
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="mt-8 flex flex-col gap-8">
         <ChipBar
           label="Field"
           tags={fields}
