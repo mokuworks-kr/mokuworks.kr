@@ -46,7 +46,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col pb-24 md:pb-0">
         <Header />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 pt-2 md:pt-4">{children}</main>
         <Footer />
         <MobileBottomNav />
       </body>
