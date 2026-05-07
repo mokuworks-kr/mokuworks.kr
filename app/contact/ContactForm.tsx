@@ -117,7 +117,7 @@ export function ContactForm({ formatTags }: { formatTags: FormatTag[] }) {
       <button
         type="submit"
         disabled={pending}
-        className="bg-ink text-paper rounded-sm px-8 py-4 text-body font-medium hover:opacity-85 transition-opacity duration-150 disabled:opacity-50 self-start"
+        className="bg-ink text-paper rounded-sm px-8 py-4 text-body font-medium hover:opacity-85 transition-opacity duration-150 disabled:opacity-50 self-end"
       >
         {pending ? "보내는 중..." : "의뢰 보내기"}
       </button>

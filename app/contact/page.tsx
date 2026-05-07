@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 
 import { ContactForm } from "./ContactForm";
+import { CopyEmail } from "./CopyEmail";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -20,9 +21,9 @@ export default async function ContactPage() {
     .order("name");
 
   return (
-    <section className="mx-auto max-w-page px-4 md:px-8 py-24 md:py-32">
+    <section className="mx-auto max-w-page px-4 md:px-8 py-16 md:py-24">
       <div className="lg:grid lg:grid-cols-3 lg:gap-12">
-        <div className="lg:sticky lg:top-48 lg:self-start">
+        <div className="lg:sticky lg:top-40 lg:self-start">
           <h1 className="text-heading font-semibold text-ink leading-tight">
             프로젝트 의뢰하기
           </h1>
@@ -32,13 +33,8 @@ export default async function ContactPage() {
           </p>
 
           <div className="mt-12 border-t border-mist pt-8">
-            <p className="text-small text-stone">직접 연락하고 싶으시다면</p>
-            <a
-              href={`mailto:${ADMIN_EMAIL}`}
-              className="mt-2 inline-block text-body text-ink hover:opacity-60 transition-opacity duration-150"
-            >
-              {ADMIN_EMAIL}
-            </a>
+            <p className="text-small text-stone">또는 직접 연락하기</p>
+            <CopyEmail email={ADMIN_EMAIL} />
           </div>
         </div>
 

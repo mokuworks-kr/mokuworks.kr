@@ -77,8 +77,8 @@ export default async function DesignDetailPage({
 
   return (
     <article className="mx-auto max-w-page px-4 md:px-8">
-      <div className="py-24 md:py-32 lg:grid lg:grid-cols-3 lg:gap-12">
-        <header className="lg:sticky lg:top-48 lg:self-start">
+      <div className="py-16 md:py-24 lg:grid lg:grid-cols-3 lg:gap-12">
+        <header className="lg:sticky lg:top-40 lg:self-start">
           <h1 className="text-heading font-semibold text-ink leading-tight">
             {design.title}
           </h1>

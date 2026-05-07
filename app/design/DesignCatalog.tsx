@@ -141,17 +141,17 @@ export function DesignCatalog({
   }
 
   return (
-    <section className="mx-auto max-w-page px-4 md:px-8 py-24 md:py-32">
+    <section className="mx-auto max-w-page px-4 md:px-8 py-16 md:py-24">
       <h1 className="sr-only">Design</h1>
 
       <div ref={filterRef}>
-        <div className="border-b border-mist transition-colors has-[input:focus]:border-ink flex flex-col md:flex-row md:items-center md:gap-6">
+        <div className="border-b border-mist transition-colors has-[input:focus]:border-ink flex items-center gap-3 md:gap-6">
           <input
             type="text"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="제목·클라이언트·설명 검색"
-            className="md:flex-1 bg-transparent text-ink py-3 text-body placeholder:text-fog focus:outline-none"
+            className="flex-1 min-w-0 bg-transparent text-ink py-3 text-body placeholder:text-fog focus:outline-none"
           />
           {(fields.length > 0 || formats.length > 0) && (
             <div className="md:hidden">

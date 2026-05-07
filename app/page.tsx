@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <section className="mx-auto max-w-page px-4 md:px-8 py-24 md:py-32">
+    <section className="mx-auto max-w-page px-4 md:px-8 py-16 md:py-24">
       <h1 className="text-heading font-semibold text-ink leading-tight">
         mokuworks 사이트 구축 중이에요.
       </h1>
